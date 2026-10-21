@@ -1,0 +1,14 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>明确标记的 DOM 采集测试夹具</title><style>body{font:15px/1.8 system-ui;max-width:680px;margin:35px auto;color:#29463e}article{border:1px solid #ddd;padding:20px;margin:18px 0}button{padding:10px}pre{white-space:pre-wrap;word-break:break-all;background:#f3f6f4;padding:14px}</style>
+<h1>浏览器 DOM 测试夹具</h1><p>这是原创测试内容，不是真实 X 页面、账号或 AI 响应。下方按钮只改变这个测试页的本地状态。</p>
+<article data-testid="tweet"><div data-testid="User-Name">测试角色 @fixture</div><a href="https://x.com/fixture/status/0"><time datetime="2026-10-20T00:00:00Z">测试时间</time></a><div data-testid="tweetText">【原创测试片段】先整理帮助资料，保留段落出处，再检索能回答问题的证据。没有证据时交给人工。</div><button data-testid="tweet-text-show-more-link">显示更多（夹具）</button><button data-testid="bookmark" id="preview">收藏预览（夹具）</button></article>
+<article data-testid="tweet"><div data-testid="User-Name">测试角色 @fixture</div><a href="https://x.com/fixture/status/1"><time datetime="2026-10-20T00:00:00Z">测试时间</time></a><div data-testid="tweetText">【原创测试正文】先把帮助文档整理成带原文出处的段落。收到问题后查找相关证据，再依据段落组织答案。证据不足需要转人工；文档过时会让答案失效。🧠</div><button data-testid="bookmark" id="full">收藏正文（夹具）</button></article>
+<button id="synthetic">程序点击预览按钮（必须忽略）</button><p id="count">采集次数：0</p><pre id="result">等待手动点击</pre>
+<script>
+let count=0;
+window.chrome={runtime:{id:'a'.repeat(32),onMessage:{addListener(){}},async sendMessage(message){
+  if(message.type==='capture-enabled')return {enabled:true};
+  if(message.type==='queue'){count++;document.getElementById('count').textContent='采集次数：'+count;document.getElementById('result').textContent=JSON.stringify(message.payload,null,2);return {ok:true};}
+}}};
+for(const button of document.querySelectorAll('[data-testid="bookmark"]'))button.addEventListener('click',()=>{button.setAttribute('data-testid',button.getAttribute('data-testid')==='bookmark'?'removeBookmark':'bookmark');});
+document.getElementById('synthetic').addEventListener('click',()=>document.getElementById('preview').click());
+</script><script src="/clipper-core.js"></script><script src="/content.js"></script></html>

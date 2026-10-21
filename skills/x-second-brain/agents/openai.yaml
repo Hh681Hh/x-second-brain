@@ -1,0 +1,4 @@
+interface:
+  display_name: "X Second Brain"
+  short_description: "保存 X 长文、检索真实知识库，按原文出处整合可执行的方法"
+  default_prompt: "使用 $x-second-brain 搜索我收藏过的相关方法，并引用原文回答。"

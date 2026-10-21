@@ -1,0 +1,709 @@
+[
+  {
+    "name": "annotated-doc",
+    "version": "0.0.5",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/annotated-doc/annotated_doc-0.0.5.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "annotated-types",
+    "version": "0.8.0",
+    "license": "MIT",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/annotated-types/annotated_types-0.8.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "anyio",
+    "version": "4.15.1",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/anyio/anyio-4.15.1.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "babel",
+    "version": "2.18.0",
+    "license": "BSD-3-Clause",
+    "classifiers": [
+      "BSD License"
+    ],
+    "homepage": "https://babel.pocoo.org/",
+    "notices": [
+      "licenses/babel/babel-2.18.0.dist-info--licenses--LICENSE",
+      "licenses/babel/babel--locale-data--LICENSE.unicode"
+    ]
+  },
+  {
+    "name": "certifi",
+    "version": "2026.7.22",
+    "license": "MPL-2.0",
+    "classifiers": [
+      "Mozilla Public License 2.0 (MPL 2.0)"
+    ],
+    "homepage": "https://github.com/certifi/python-certifi",
+    "notices": [
+      "licenses/certifi/certifi-2026.7.22.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "cffi",
+    "version": "2.1.1",
+    "license": "MIT-0",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/cffi/cffi-2.1.1.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "charset-normalizer",
+    "version": "3.5.2",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/charset-normalizer/charset_normalizer-3.5.2.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "click",
+    "version": "8.5.0",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/click/click-8.5.0.dist-info--licenses--LICENSE.txt"
+    ]
+  },
+  {
+    "name": "colorama",
+    "version": "0.4.6",
+    "license": "BSD License",
+    "classifiers": [
+      "BSD License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/colorama/colorama-0.4.6.dist-info--licenses--LICENSE.txt"
+    ]
+  },
+  {
+    "name": "courlan",
+    "version": "1.4.0",
+    "license": "Apache-2.0",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/courlan/courlan-1.4.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "cryptography",
+    "version": "47.0.0",
+    "license": "Apache-2.0 OR BSD-3-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/cryptography/cryptography-47.0.0.dist-info--licenses--LICENSE",
+      "licenses/cryptography/cryptography-47.0.0.dist-info--licenses--LICENSE.APACHE",
+      "licenses/cryptography/cryptography-47.0.0.dist-info--licenses--LICENSE.BSD"
+    ]
+  },
+  {
+    "name": "dateparser",
+    "version": "1.4.3",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/dateparser/dateparser-1.4.3.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "fastapi",
+    "version": "0.143.3",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/fastapi/fastapi-0.143.3.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "fastembed",
+    "version": "0.9.0",
+    "license": "Apache-2.0",
+    "classifiers": [
+      "Apache Software License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/fastembed/fastembed-0.9.0.dist-info--licenses--LICENSE",
+      "licenses/fastembed/fastembed-0.9.0.dist-info--licenses--NOTICE"
+    ]
+  },
+  {
+    "name": "filelock",
+    "version": "4.2.0",
+    "license": "MIT",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/filelock/filelock-4.2.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "flatbuffers",
+    "version": "25.12.19",
+    "license": "Apache 2.0",
+    "classifiers": [
+      "Apache Software License"
+    ],
+    "homepage": "https://google.github.io/flatbuffers/",
+    "notices": []
+  },
+  {
+    "name": "fsspec",
+    "version": "2026.9.0",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/fsspec/fsspec-2026.9.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "h11",
+    "version": "0.16.0",
+    "license": "MIT",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": "https://github.com/python-hyper/h11",
+    "notices": [
+      "licenses/h11/h11-0.16.0.dist-info--licenses--LICENSE.txt"
+    ]
+  },
+  {
+    "name": "hf-xet",
+    "version": "1.7.0",
+    "license": "Apache-2.0",
+    "classifiers": [
+      "Apache Software License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/hf-xet/hf_xet-1.7.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "htmldate",
+    "version": "1.11.0",
+    "license": "Apache-2.0",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/htmldate/htmldate-1.11.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "httpcore",
+    "version": "1.0.9",
+    "license": "BSD-3-Clause",
+    "classifiers": [
+      "BSD License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/httpcore/httpcore-1.0.9.dist-info--licenses--LICENSE.md"
+    ]
+  },
+  {
+    "name": "httpx",
+    "version": "0.28.1",
+    "license": "BSD-3-Clause",
+    "classifiers": [
+      "BSD License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/httpx/httpx-0.28.1.dist-info--licenses--LICENSE.md"
+    ]
+  },
+  {
+    "name": "huggingface_hub",
+    "version": "1.33.0",
+    "license": "Apache-2.0",
+    "classifiers": [
+      "Apache Software License"
+    ],
+    "homepage": "https://github.com/huggingface/huggingface_hub",
+    "notices": [
+      "licenses/huggingface_hub/huggingface_hub-1.33.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "idna",
+    "version": "3.20",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/idna/idna-3.20.dist-info--licenses--LICENSE.md"
+    ]
+  },
+  {
+    "name": "iniconfig",
+    "version": "2.3.1",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/iniconfig/iniconfig-2.3.1.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "jusText",
+    "version": "3.0.2",
+    "license": "The BSD 2-Clause License",
+    "classifiers": [
+      "BSD License"
+    ],
+    "homepage": "https://github.com/miso-belica/jusText",
+    "notices": [
+      "licenses/jusText/justext-3.0.2.dist-info--LICENSE.rst"
+    ]
+  },
+  {
+    "name": "loguru",
+    "version": "0.7.3",
+    "license": "MIT License",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": null,
+    "notices": []
+  },
+  {
+    "name": "lxml",
+    "version": "6.1.3",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": "https://lxml.de/",
+    "notices": [
+      "licenses/lxml/lxml-6.1.3.dist-info--licenses--LICENSE.txt",
+      "licenses/lxml/lxml-6.1.3.dist-info--licenses--LICENSES.txt"
+    ]
+  },
+  {
+    "name": "lxml_html_clean",
+    "version": "0.4.5",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": "https://github.com/fedora-python/lxml_html_clean/",
+    "notices": [
+      "licenses/lxml_html_clean/lxml_html_clean-0.4.5.dist-info--licenses--LICENSE.txt"
+    ]
+  },
+  {
+    "name": "mmh3",
+    "version": "5.3.1",
+    "license": "MIT License\n\nCopyright (c) 2011-2026 Hajime Senuma\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/mmh3/mmh3-5.3.1.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "numpy",
+    "version": "2.5.4",
+    "license": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--LICENSE.txt",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--_core--include--numpy--libdivide--LICENSE.txt",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--_core--src--common--pythoncapi-compat--COPYING",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--_core--src--highway--LICENSE",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--_core--src--multiarray--dragon4_LICENSE.txt",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--_core--src--npysort--x86-simd-sort--LICENSE.md",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--_core--src--umath--svml--LICENSE",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--fft--pocketfft--LICENSE.md",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--linalg--lapack_lite--LICENSE.txt",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--ma--LICENSE",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--random--LICENSE.md",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--random--src--distributions--LICENSE.md",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--random--src--mt19937--LICENSE.md",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--random--src--pcg64--LICENSE.md",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--random--src--philox--LICENSE.md",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--random--src--sfc64--LICENSE.md",
+      "licenses/numpy/numpy-2.5.4.dist-info--licenses--numpy--random--src--splitmix64--LICENSE.md",
+      "licenses/numpy/numpy--_core--include--numpy--random--LICENSE.txt",
+      "licenses/numpy/numpy--ma--LICENSE",
+      "licenses/numpy/numpy--random--LICENSE.md"
+    ]
+  },
+  {
+    "name": "onnxruntime",
+    "version": "1.31.0",
+    "license": "MIT License",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": "https://onnxruntime.ai",
+    "notices": [
+      "licenses/onnxruntime/onnxruntime--LICENSE",
+      "licenses/onnxruntime/onnxruntime--ThirdPartyNotices.txt"
+    ]
+  },
+  {
+    "name": "opentelemetry-api",
+    "version": "1.45.1",
+    "license": "Apache-2.0",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/opentelemetry-api/opentelemetry_api-1.45.1.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "packaging",
+    "version": "26.3",
+    "license": "Apache-2.0 OR BSD-2-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/packaging/packaging-26.3.dist-info--licenses--LICENSE",
+      "licenses/packaging/packaging-26.3.dist-info--licenses--LICENSE.APACHE",
+      "licenses/packaging/packaging-26.3.dist-info--licenses--LICENSE.BSD"
+    ]
+  },
+  {
+    "name": "pillow",
+    "version": "12.3.0",
+    "license": "MIT-CMU",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/pillow/pillow-12.3.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "pip",
+    "version": "25.0.1",
+    "license": "MIT",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/pip/pip-25.0.1.dist-info--LICENSE.txt"
+    ]
+  },
+  {
+    "name": "pluggy",
+    "version": "1.7.0",
+    "license": "MIT",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/pluggy/pluggy-1.7.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "protobuf",
+    "version": "7.36.2",
+    "license": "3-Clause BSD License",
+    "classifiers": [],
+    "homepage": "https://developers.google.com/protocol-buffers/",
+    "notices": [
+      "licenses/protobuf/protobuf-7.36.2.dist-info--LICENSE"
+    ]
+  },
+  {
+    "name": "py_rust_stemmers",
+    "version": "0.1.8",
+    "license": "Inspect bundled notices / upstream",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/py_rust_stemmers/py_rust_stemmers-0.1.8.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "pycparser",
+    "version": "3.11",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/pycparser/pycparser-3.11.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "pydantic",
+    "version": "2.14.1",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/pydantic/pydantic-2.14.1.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "pydantic_core",
+    "version": "2.50.1",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": "https://github.com/pydantic/pydantic",
+    "notices": [
+      "licenses/pydantic_core/pydantic_core-2.50.1.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "Pygments",
+    "version": "2.21.0",
+    "license": "BSD-2-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/Pygments/pygments-2.21.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "pytest",
+    "version": "9.1.1",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/pytest/pytest-9.1.1.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "python-dateutil",
+    "version": "2.9.0.post0",
+    "license": "Dual License",
+    "classifiers": [
+      "BSD License",
+      "Apache Software License"
+    ],
+    "homepage": "https://github.com/dateutil/dateutil",
+    "notices": [
+      "licenses/python-dateutil/python_dateutil-2.9.0.post0.dist-info--LICENSE"
+    ]
+  },
+  {
+    "name": "python-dotenv",
+    "version": "1.2.4",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/python-dotenv/python_dotenv-1.2.4.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "pytz",
+    "version": "2026.5",
+    "license": "MIT",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": "http://pythonhosted.org/pytz",
+    "notices": [
+      "licenses/pytz/pytz-2026.5.dist-info--LICENSE.txt"
+    ]
+  },
+  {
+    "name": "PyYAML",
+    "version": "6.0.3",
+    "license": "MIT",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": "https://pyyaml.org/",
+    "notices": [
+      "licenses/PyYAML/pyyaml-6.0.3.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "regex",
+    "version": "2026.9.29",
+    "license": "Apache-2.0 AND CNRI-Python",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/regex/regex-2026.9.29.dist-info--licenses--LICENSE.txt"
+    ]
+  },
+  {
+    "name": "requests",
+    "version": "2.34.2",
+    "license": "Apache-2.0",
+    "classifiers": [
+      "Apache Software License"
+    ],
+    "homepage": null,
+    "notices": [
+      "licenses/requests/requests-2.34.2.dist-info--licenses--LICENSE",
+      "licenses/requests/requests-2.34.2.dist-info--licenses--NOTICE"
+    ]
+  },
+  {
+    "name": "six",
+    "version": "1.17.0",
+    "license": "MIT",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": "https://github.com/benjaminp/six",
+    "notices": [
+      "licenses/six/six-1.17.0.dist-info--LICENSE"
+    ]
+  },
+  {
+    "name": "starlette",
+    "version": "1.8.0",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/starlette/starlette-1.8.0.dist-info--licenses--LICENSE.md"
+    ]
+  },
+  {
+    "name": "tld",
+    "version": "0.13.2",
+    "license": "MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/tld/tld-0.13.2.dist-info--licenses--LICENSE.rst",
+      "licenses/tld/tld-0.13.2.dist-info--licenses--LICENSE_GPL2.0.txt",
+      "licenses/tld/tld-0.13.2.dist-info--licenses--LICENSE_LGPL_2.1.txt",
+      "licenses/tld/tld-0.13.2.dist-info--licenses--LICENSE_MPL_1.1.txt"
+    ]
+  },
+  {
+    "name": "tokenizers",
+    "version": "0.23.3",
+    "license": "Apache Software License",
+    "classifiers": [
+      "Apache Software License"
+    ],
+    "homepage": null,
+    "notices": []
+  },
+  {
+    "name": "tqdm",
+    "version": "4.70.1",
+    "license": "MPL-2.0 AND MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/tqdm/tqdm-4.70.1.dist-info--licenses--LICENCE"
+    ]
+  },
+  {
+    "name": "trafilatura",
+    "version": "2.3.1",
+    "license": "Apache-2.0",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/trafilatura/trafilatura-2.3.1.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "typing-inspection",
+    "version": "0.4.4",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/typing-inspection/typing_inspection-0.4.4.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "typing_extensions",
+    "version": "4.16.0",
+    "license": "PSF-2.0",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/typing_extensions/typing_extensions-4.16.0.dist-info--licenses--LICENSE"
+    ]
+  },
+  {
+    "name": "tzdata",
+    "version": "2026.5",
+    "license": "Apache-2.0",
+    "classifiers": [],
+    "homepage": "https://github.com/python/tzdata",
+    "notices": [
+      "licenses/tzdata/tzdata-2026.5.dist-info--licenses--LICENSE",
+      "licenses/tzdata/tzdata-2026.5.dist-info--licenses--licenses--LICENSE_APACHE"
+    ]
+  },
+  {
+    "name": "tzlocal",
+    "version": "5.4.4",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/tzlocal/tzlocal-5.4.4.dist-info--licenses--LICENSE.txt"
+    ]
+  },
+  {
+    "name": "urllib3",
+    "version": "2.8.0",
+    "license": "MIT",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/urllib3/urllib3-2.8.0.dist-info--licenses--LICENSE.txt"
+    ]
+  },
+  {
+    "name": "uvicorn",
+    "version": "0.54.0",
+    "license": "BSD-3-Clause",
+    "classifiers": [],
+    "homepage": null,
+    "notices": [
+      "licenses/uvicorn/uvicorn-0.54.0.dist-info--licenses--LICENSE.md"
+    ]
+  },
+  {
+    "name": "win32_setctime",
+    "version": "1.2.0",
+    "license": "MIT license",
+    "classifiers": [
+      "MIT License"
+    ],
+    "homepage": "https://github.com/Delgan/win32-setctime",
+    "notices": [
+      "licenses/win32_setctime/win32_setctime-1.2.0.dist-info--LICENSE"
+    ]
+  }
+]

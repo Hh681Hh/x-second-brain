@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8fa">
+  <meta name="description" content="把收藏变成随时可调用的知识。原文保存、深度阅读、带出处的知识问答。">
+  <title>X Second Brain · 让收藏产生回响</title>
+  <link rel="icon" href="/static/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css?v=0.2.0">
+  <script src="/static/app.js?v=0.2.0" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="主导航">
+      <a href="#home" class="brand"><img src="/static/mark.svg" alt="" width="34" height="34"><span>Second Brain<small>你的知识，随时回响</small></span></a>
+      <button class="button primary collect-button" data-action="import"><span aria-hidden="true">＋</span> 快速收藏 <kbd>N</kbd></button>
+      <nav class="primary-nav">
+        <a href="#home" data-route="home"><span class="nav-symbol">◫</span>知识工作台</a>
+        <a href="#library" data-route="library"><span class="nav-symbol">▤</span>全部收藏 <span class="nav-count" id="library-count">0</span></a>
+        <a href="#priority" data-route="priority"><span class="nav-symbol">◷</span>阅读队列</a>
+        <a href="#chat" data-route="chat"><span class="nav-symbol">✧</span>问问知识库</a>
+        <a href="#network" data-route="network"><span class="nav-symbol">⌘</span>知识关联</a>
+        <a href="#sync" data-route="sync"><span class="nav-symbol">↻</span>X 自动同步</a>
+      </nav>
+      <div class="nav-section-label">我的主题 <button class="icon-button" data-action="settings" aria-label="编辑主题">＋</button></div>
+      <nav id="category-nav" class="category-nav" aria-label="主题分类"></nav>
+      <div class="sidebar-bottom">
+        <div class="local-note"><span class="status-dot"></span><span>本地优先<small>原文与知识由你保管</small></span></div>
+        <button class="settings-button" data-action="settings"><span aria-hidden="true">⚙</span> 设置与数据</button>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar"><div class="breadcrumb"><span class="mobile-brand">◈</span> 我的知识空间 <span>/</span> <strong id="page-breadcrumb">工作台</strong></div><div class="topbar-right"><button class="status-pill" id="model-status" data-action="settings">连接中</button><button class="mobile-add icon-button" data-action="import" aria-label="快速收藏">＋</button><span class="avatar" aria-label="个人空间">Me</span></div></header>
+      <main id="main" tabindex="-1">
+        <div id="connection-error" class="banner error" hidden></div>
+        <section id="view-home" class="view">
+          <div class="page-heading"><div><div class="eyebrow">YOUR PERSONAL KNOWLEDGE SPACE</div><h1>让收藏，真正为你所用。</h1><p>读懂当下的好内容，找回未来需要的方法。</p></div><span class="date-label" id="today-label"></span></div>
+          <div class="ask-hero">
+            <div class="hero-orbit" aria-hidden="true"><span>✧</span></div>
+            <div class="hero-copy"><span class="small-label">从一个问题开始</span><h2>答案，也许就在你的收藏里。</h2><p>描述你正在面对的问题，让过去读到的知识重新连接。</p></div>
+            <form id="home-ask-form" class="ask-input"><label for="home-question" class="sr-only">向收藏知识库提问</label><input id="home-question" placeholder="我想为业务搭建自动客服，有哪些可借鉴的方法？" minlength="2" maxlength="2000" required><button class="send-button" aria-label="发送问题">↗</button></form>
+            <div class="hero-footer"><span><span class="tiny-dot"></span> 依据你的真实收藏回答</span><span>每个重要结论，都有出处 ↗</span></div>
+          </div>
+          <div class="stats-grid" id="stats-grid"></div>
+          <div class="section-heading"><div><h2>把下一次阅读，留给值得的内容<span class="subtle-tag">阅读队列</span></h2><p>结合证据、实操性与长期价值，少一点囤积，多一点消化。</p></div><a href="#priority" class="text-link">查看队列 <span>→</span></a></div>
+          <div id="home-priority" class="reading-grid"></div>
+          <div class="section-heading"><div><h2>最近进入你的知识库</h2><p>收藏只是开始。知识会随着你的问题再次被找到。</p></div><a href="#library" class="text-link">全部收藏 →</a></div>
+          <div id="home-recent" class="article-list"></div>
+          <div class="quiet-footer"><span>收集灵感</span><i></i><span>理解方法</span><i></i><span>调用知识</span><span class="footer-note">一个属于你的长期思考空间</span></div>
+        </section>
+
+        <section id="view-library" class="view" hidden>
+          <div class="page-heading"><div><div class="eyebrow">THE COLLECTION</div><h1 id="library-title">全部收藏</h1><p>保留原文、作者与方法，让每一份知识有迹可循。</p></div><button class="button primary" data-action="import">＋ 添加收藏</button></div>
+          <form id="search-form" class="search-bar"><span aria-hidden="true">⌕</span><label for="search-query" class="sr-only">搜索文章或描述问题</label><input id="search-query" placeholder="搜索标题、标签，或用自己的话描述一个问题…" minlength="2" maxlength="2000"><button class="button" type="submit">检索</button></form>
+          <div class="filter-row"><label class="select-label">主题 <select id="category-filter"><option value="">全部主题</option></select></label><label class="check-label"><input type="checkbox" id="unread-filter"> 只看未读</label><label class="select-label sort-select">排序 <select id="sort-filter"><option value="recent">最近收藏</option><option value="priority">阅读价值</option></select></label></div>
+          <div id="search-meta" class="search-meta" aria-live="polite"></div><div id="library-results"></div>
+          <button class="button load-more" id="load-more" hidden>加载更多</button>
+        </section>
+
+        <section id="view-priority" class="view" hidden>
+          <div class="page-heading"><div><div class="eyebrow">READ WITH INTENTION</div><h1>值得你认真读一读。</h1><p>每个评分都有理由。把有限的注意力，留给更有用的方法。</p></div></div>
+          <div class="banner info">阅读价值是 AI 的排序建议，不能代替事实核验。未完成 AI 分析的收藏会排在后面。</div><div id="priority-results" class="reading-grid large"></div>
+        </section>
+
+        <section id="view-chat" class="view chat-view" hidden>
+          <div class="chat-heading"><div><div class="eyebrow">ASK YOUR SECOND BRAIN</div><h1>把知识用起来。</h1></div><button class="button" id="new-chat">＋ 新对话</button></div>
+          <div class="chat-layout"><aside class="chat-history"><div class="nav-section-label">最近对话</div><div id="session-list"></div></aside><div class="chat-main"><div id="chat-messages" class="chat-messages" aria-live="polite"></div><form id="chat-form" class="chat-composer"><label for="chat-question" class="sr-only">描述问题</label><textarea id="chat-question" rows="2" placeholder="描述你的问题，或追问一个具体步骤…" minlength="2" maxlength="2000" required></textarea><div class="composer-footer"><span>先检索收藏，再形成建议 · 引用可核对原文</span><button class="send-button" id="chat-send" aria-label="发送问题">↑</button></div></form></div></div>
+        </section>
+
+        <section id="view-network" class="view" hidden>
+          <div class="page-heading"><div><div class="eyebrow">CONNECTED KNOWLEDGE</div><h1>让好想法，彼此连接。</h1><p>选择一篇收藏，发现讨论相近问题的方法。跨文共识与分歧可以继续提问。</p></div></div>
+          <label class="field">从一篇文章出发<select id="network-select"><option value="">选择一篇收藏…</option></select></label><div id="network-results"></div>
+        </section>
+        <section id="view-sync" class="view" hidden>
+          <div class="page-heading"><div><div class="eyebrow">COLLECT ON X, LEARN HERE</div><h1>收藏之后，知识自动归位。</h1><p>连接你的 X 账号，让新收藏的长文自动进入知识库。</p></div></div>
+          <div class="sync-layout">
+            <div class="sync-panel"><span class="small-label">连接状态</span><div id="sync-status" aria-live="polite"></div><div id="sync-error" class="banner error" role="alert" hidden></div><div class="sync-steps"><span>1. 配置应用</span><span>2. 官方授权</span><span>3. 开启同步</span></div><div class="button-row"><button class="button primary" id="sync-connect">连接 X 账号 ↗</button><button class="button" id="sync-disconnect" hidden>断开连接</button></div><div class="sync-activation"><label class="check-label"><input type="checkbox" id="sync-cost">我了解 X API 按用量计费，并会在官方控制台设置支出上限。</label><div class="button-row"><button class="button primary" id="sync-enable">开启自动同步</button><button class="button" id="sync-pause" hidden>暂停同步</button><button class="button" id="sync-now">检查新收藏</button></div></div><div id="sync-results" class="sync-results"></div><p class="muted sync-hint">同步时电脑及本地服务需要保持运行。授权后按设定间隔检查；不是点击后即时推送。没有全文的收藏会保留链接并标记“待补充全文”。</p></div>
+            <div class="sync-panel"><span class="small-label">一次配置，持续使用</span><h2>连接你的开发者应用</h2><p>在 <a href="https://developer.x.com/" target="_blank" rel="noopener">X 开发者控制台 ↗</a> 创建应用并启用 OAuth 2.0。个人本地使用可选择 Native App，将下面的地址完整登记为回调地址。</p><label class="field">回调地址<input id="sync-callback" readonly></label><form id="sync-config-form"><label class="field">OAuth 2.0 Client ID<input id="sync-client-id" maxlength="250" autocomplete="off" placeholder="从 X 应用的 Keys and Tokens 获取"></label><div class="field-row"><label class="field">检查间隔<select id="sync-interval"><option value="5">每 5 分钟</option><option value="10">每 10 分钟</option><option value="30">每 30 分钟</option><option value="60">每小时</option><option value="1440">每天</option></select></label><label class="field">导入范围<select id="sync-long-only"><option value="true">只导入长文</option><option value="false">全部收藏帖子</option></select></label></div><details class="sync-advanced"><summary>每次检查的读取上限</summary><div class="field-row"><label class="field">每页帖子数<input id="sync-page-size" type="number" min="5" max="100" value="20" required></label><label class="field">最多页数<input id="sync-max-pages" type="number" min="2" max="10" value="3" required></label></div><p>默认每次最多读取 60 条，首次也会导入已有收藏；较多历史收藏分次读取，以接口可返回的范围为准。每次优先检查第一页，再续取上次尚未读完的页面。短帖仍可能产生读取费用。</p></details><button class="button" type="submit">保存连接设置</button></form><p class="muted sync-hint">只申请读取帖子、用户、收藏和后台续期权限，不索取密码或浏览器 Cookie。授权令牌加密保存在本机，不包含在知识库导出中。Web App 的 Client Secret 请在服务端 .env 配置。</p></div>
+          </div>
+        </section>
+      </main>
+      <nav class="mobile-nav" aria-label="移动端导航"><a href="#home" data-route="home">◫<span>工作台</span></a><a href="#library" data-route="library">▤<span>收藏</span></a><a href="#priority" data-route="priority">◷<span>阅读</span></a><a href="#chat" data-route="chat">✧<span>提问</span></a><button data-action="settings">⚙<span>设置</span></button></nav>
+    </div>
+  </div>
+
+  <dialog id="import-dialog" class="modal"><div class="dialog-heading"><div><span class="small-label">CAPTURE A GOOD IDEA</span><h2 id="import-title">把值得的内容，留在这里。</h2></div><button class="icon-button" data-close="import-dialog" aria-label="关闭收藏窗口">×</button></div><div class="tabs" id="import-tabs"><button data-import-mode="link" class="active">链接收藏</button><button data-import-mode="text">粘贴全文</button><button data-import-mode="batch">批量链接</button></div><form id="import-form"><div id="import-fields"></div><div class="import-note" id="import-note"></div><div id="import-result" class="inline-result" aria-live="polite"></div><div class="dialog-footer"><button type="button" class="button" data-close="import-dialog">取消</button><button class="button primary" id="import-submit">保存并学习 →</button></div></form></dialog>
+
+  <dialog id="reader-dialog" class="reader"><div class="reader-top"><span class="small-label">YOUR KNOWLEDGE · 个人藏书</span><button class="icon-button" data-close="reader-dialog" aria-label="关闭阅读器">×</button></div><div id="reader-header"></div><div class="tabs reader-tabs" id="reader-tabs"><button data-reader-mode="quick" class="active">30 秒速读</button><button data-reader-mode="standard">3 分钟精读</button><button data-reader-mode="deep">深度分析</button><button data-reader-mode="original">原文</button></div><div id="reader-content" class="reader-content"></div><div class="reader-bottom"><button class="button" id="read-toggle">标为已读</button><button class="button" id="reader-edit">编辑内容</button><button class="button" id="reader-retry">重新处理</button><button class="icon-button danger" id="reader-delete" aria-label="删除这篇收藏">⌫</button></div></dialog>
+
+  <dialog id="edit-dialog" class="modal"><div class="dialog-heading"><h2>修订收藏</h2><button class="icon-button" data-close="edit-dialog" aria-label="关闭编辑窗口">×</button></div><form id="edit-form"><label class="field">标题<input id="edit-title" required maxlength="300"></label><div class="field-row"><label class="field">作者<input id="edit-author" maxlength="200"></label><label class="field">发布时间<input id="edit-published" maxlength="80" placeholder="未知可留空"></label></div><label class="field">主题<select id="edit-category"></select></label><label class="field">标签（逗号分隔）<input id="edit-tags" maxlength="600"></label><label class="field">完整正文<textarea id="edit-content" rows="10" minlength="20" maxlength="120000" required></textarea></label><div class="import-note">修改正文或标题会重新分析与建立索引；修改标签和主题不会产生 AI 费用。</div><div class="dialog-footer"><button type="button" class="button" data-close="edit-dialog">取消</button><button class="button primary">保存修改</button></div></form></dialog>
+
+  <dialog id="settings-dialog" class="modal settings-modal"><div class="dialog-heading"><div><span class="small-label">YOUR DATA, YOUR SPACE</span><h2>设置与数据</h2></div><button class="icon-button" data-close="settings-dialog" aria-label="关闭设置">×</button></div><div id="settings-status"></div><form id="preferences-form"><label class="field">主题分类（每行一个）<textarea id="settings-categories" rows="5" required></textarea></label><label class="field">我关注的方向<textarea id="settings-interests" rows="2" placeholder="例如：AI Agent 的实际落地、小团队获客、自动化工具…" maxlength="1000"></textarea></label><button class="button" type="submit">保存偏好</button></form><div class="settings-section"><h3>数据由你保管</h3><p>JSON 备份包含原文、知识结构、元数据与对话，不含密钥及模型文件。</p><div class="button-row"><button class="button" id="export-data">↓ 导出备份</button><label class="button file-button">↑ 导入备份<input type="file" id="import-backup" accept="application/json,.json"></label><button class="button" id="reindex">重建知识索引</button></div><div id="transfer-result" class="inline-result" aria-live="polite"></div></div><div class="settings-section"><h3>连接这个知识库</h3><p>仅在服务设置了 APP_TOKEN 时需要。令牌保存在当前标签页的会话中。</p><form id="token-form" class="button-row"><input type="password" id="app-token" placeholder="APP_TOKEN" autocomplete="off"><button class="button">连接</button></form></div><div class="settings-section"><h3>模型与 Codex Skill</h3><p>模型密钥在服务端 .env 中配置，重启生效。本地语义模型无需 API Key；首次索引需下载权重。</p><p>Skill 使用同一份真实数据库。安装方式见项目 README；接口说明见 <a href="/api/docs" target="_blank" rel="noopener">API 文档 ↗</a>。</p><p><a href="#sync" data-open-sync>连接 X 自动同步 ↗</a> · 官方授权后自动检查新收藏，需要可用 API 额度。</p></div></dialog>
+
+  <dialog id="confirm-dialog" class="modal confirm-modal"><h2 id="confirm-title">确认操作</h2><p id="confirm-message"></p><div class="dialog-footer"><button class="button" id="confirm-cancel">取消</button><button class="button primary" id="confirm-yes">确认</button></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>X 书签助手</title><link rel="stylesheet" href="popup.css"><script defer src="popup.js"></script></head><body>
+<header><span class="symbol">↗</span><div><strong>X 书签助手</strong><small>收藏之后，知识留下。</small></div></header>
+<div id="state" role="status">正在连接…</div><p id="error" role="alert" hidden></p>
+<form id="pair-form"><label>一次性配对码<input id="code" autocomplete="off" placeholder="从本地连接页复制" maxlength="40" required></label><details><summary>本地地址</summary><input id="base" value="http://127.0.0.1:8787" type="url" required></details><button>连接本地知识库</button><a href="http://127.0.0.1:8787/" target="_blank" rel="noopener">打开安装和配对页 ↗</a></form>
+<section id="connected" hidden><label class="toggle"><input type="checkbox" id="auto" checked>我点书签后自动保存</label><button id="capture">保存当前内容</button><p class="hint">用于已经收藏过、刚展开全文的帖子。仅保存这一条已加载正文；Article 预览会标记待补全。</p><div id="stats"></div><div class="actions"><button id="retry" class="secondary">重试发送</button><button id="reconnect" class="text">重新配对</button></div></section>
+<footer><p id="queue"></p><button id="clear" class="text" hidden>清空待发送内容</button><p>仅在这台电脑的 X 网页工作。插件免费，无需 X API；阅读使用你的 Codex 额度。</p></footer></body></html>

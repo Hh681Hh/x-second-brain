@@ -1,0 +1,20 @@
+{
+  "version": "0.3.2",
+  "date": "2026-10-21",
+  "timezone": "Asia/Shanghai",
+  "local_python": {"passed": 80, "integration_deselected": 4, "warnings": 1},
+  "local_node": {"passed": 9},
+  "skill_validation": "passed",
+  "wheel_build": "passed",
+  "source_privacy_and_links_check": "passed",
+  "public_fulltext_live_test": {
+    "content_characters": 16484,
+    "blocks_matched_to_visible_source": 112,
+    "real_codex_analysis": true,
+    "category": "获客与营销",
+    "verified_quotes": 22,
+    "personal_bookmarks_sent": false,
+    "native_unexpanded_bookmark_click_verified": false
+  },
+  "github_ci": "Not enabled: upload credential lacks workflow scope. A workflow template is included."
+}

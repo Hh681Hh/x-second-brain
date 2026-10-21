@@ -1,0 +1,14 @@
+.git
+.venv
+.env
+.env.*
+data
+.cache
+artifacts
+research-cache
+**/__pycache__
+*.egg-info
+docs/validation
+docs/IMPORT-*
+docs/AUTOSTART-*
+docs/DEPLOYMENT-*
