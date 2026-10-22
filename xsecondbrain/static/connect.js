@@ -16,6 +16,9 @@ async function refresh(){
   const seen=b.pairs.map(p=>p.last_seen).filter(Boolean).sort().pop();
   el('pair-state').textContent='已配对 '+b.pairs.length+' 个浏览器插件。'+(seen?' 最近通信：'+new Date(seen).toLocaleString('zh-CN')+'。':'');
   el('capture-state').textContent='插件已入库 '+b.captured_total+' 篇 · 待补全 '+b.needs_content+' 篇。';
+  el('capture-instructions').textContent=b.public_fulltext_provider==='fxembed'
+    ?'自动补全文已启用：直接点书签，后台会通过 FxEmbed 尝试获取公开长文并阅读分类，无需手动展开。需要补全的帖子 ID 会发送给该非官方服务；取文失败会保留链接并标记待补全。'
+    :'未启用第三方补全文：先展开想保存的长文，再点书签。插件只保存页面已加载的内容；预览会留作待补全。';
   el('reader-state').textContent=(s.llm_enabled?'阅读引擎：'+s.llm_model:'未配置阅读引擎，仍可保存和搜索原文')+' · 库内 '+s.total+' 篇，已分析 '+s.learned+' 篇，等待阅读 '+s.queued+' 篇。';
 }
 async function action(button,work){if(busy)return;busy=true;button.disabled=true;el('error').hidden=true;try{await work();}catch(error){showError(error);}finally{busy=false;button.disabled=false;}}

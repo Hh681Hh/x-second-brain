@@ -1,4 +1,5 @@
 """Per-user, windowless Windows logon supervisor; no elevated rights or secrets."""
+import argparse
 import logging
 from logging.handlers import RotatingFileHandler
 import os
@@ -39,9 +40,15 @@ def ensure_service(settings):
     return True
 
 
-def main():
+def main(argv=None):
     if os.name != 'nt':
         raise SystemExit('This logon supervisor is for Windows only.')
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--codex-binary', default='')
+    args = parser.parse_args(argv)
+    if args.codex_binary:
+        # Scheduled tasks do not inherit the Codex desktop application's PATH.
+        os.environ['CODEX_BINARY'] = args.codex_binary
     settings = Settings.from_env()
     settings.data_dir.mkdir(parents=True, exist_ok=True)
     enabled = settings.data_dir / 'autostart.enabled'
