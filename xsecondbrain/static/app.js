@@ -42,16 +42,23 @@ async function busy(button, action, label='处理中…') {
 
 function empty(title, text, action='import') { return `<div class="empty-state"><span class="empty-icon">✧</span><h3>${h(title)}</h3><p>${h(text)}</p>${action ? `<button class="button" data-action="${h(action)}">${action === 'import' ? '＋ 收藏第一篇内容' : '打开设置'}</button>` : ''}</div>`; }
 function badge(article) {
-  const options = {ready:['已沉淀',''],saved:['原文已存',''],queued:['等待处理','working'],processing:['正在学习','working'],needs_content:['待补充全文','warn'],error:['可重试','warn']};
+  const options = {ready:['已分析',''],saved:['原文已存',''],queued:['等待分析','working'],processing:['正在分析','working'],needs_content:['待补充全文','warn'],error:['分析失败','warn']};
   const [label, cls] = options[article.status] || ['已保存',''];
   return `<span class="state-badge ${cls}">${label}</span>`;
 }
 function topicTag(article, index=0) { return `<span class="topic-tag color${index % 4}">${h(article.category || '其他知识')}</span>`; }
+function summaryPreview(article) {
+  if (article.quick?.length) return article.quick.map((point) => point.text).join(' ');
+  if (article.status === 'needs_content') return '暂未取得全文，补全后才能生成重点摘要。';
+  if (['queued','processing'].includes(article.status)) return '正在整理文章重点，完成后会自动显示。';
+  if (article.status === 'error') return '分析尚未完成，点击查看原因和已保存的内容。';
+  return '原文已保存，尚未生成重点摘要。';
+}
 function articleRow(article) {
-  return `<button class="article-row" data-article="${h(article.id)}"><span class="source-icon" aria-hidden="true">${article.url?.includes('x.com') ? '𝕏' : article.source_kind === 'thread' ? '≋' : '▧'}</span><span class="row-copy"><h3>${h(article.title)}</h3><p><span>${h(article.author || '作者未填写')}</span><span>·</span>${badge(article)}${article.is_read ? '<span>已读</span>' : ''}</p></span>${topicTag(article)}<span class="row-date">${date(article.saved_at)}</span><span class="row-arrow">↗</span></button>`;
+  return `<button class="article-row" data-article="${h(article.id)}"><span class="source-icon" aria-hidden="true">${article.url?.includes('x.com') ? '𝕏' : article.source_kind === 'thread' ? '≋' : '▧'}</span><span class="row-copy"><span class="row-heading"><span class="row-title">${h(article.title)}</span>${topicTag(article)}</span><span class="row-summary${article.quick?.length ? '' : ' pending'}">${h(summaryPreview(article))}</span><span class="row-meta"><span>${h(article.author || '作者未填写')}</span><span>收藏于 ${date(article.saved_at)}</span>${badge(article)}${article.is_read ? '<span>已读</span>' : ''}</span></span><span class="row-action">查看重点 <span aria-hidden="true">→</span></span></button>`;
 }
 function readingCard(article, index=0) {
-  const summary = article.quick?.map((point) => point.text).join(' ') || article.excerpt || '尚未取得全文，点击补充文章内容。';
+  const summary = summaryPreview(article);
   const reasons = article.ratings ? Object.entries(article.ratings).map(([key, value]) => `${ratingNames[key]} ${value.score}/5：${value.reason}`).join('\n') : 'AI 分析完成后会显示评分和具体理由。';
   return `<button class="reading-card" data-article="${h(article.id)}" title="${h(reasons)}"><div class="card-top">${topicTag(article,index)}<span class="score-tag">${article.priority != null ? `阅读价值 <strong>${Number(article.priority).toFixed(1)}</strong> / 5` : '待 AI 评价'}</span></div><h3>${h(article.title)}</h3><p class="card-excerpt">${h(summary)}</p><div class="card-bottom"><span class="author-name">${h(article.author || '作者未填写')}</span><span>${article.is_read ? '已读' : '开始阅读'} ↗</span></div></button>`;
 }
@@ -63,8 +70,8 @@ async function refreshStatus() {
   $('#model-status').textContent = state.status.llm_enabled ? 'AI 已配置' : '基础收藏模式';
   $('#model-status').classList.toggle('ready', state.status.llm_enabled);
   $('#stats-grid').innerHTML = [
-    ['收藏的好内容',state.status.total,'篇','▤'], ['已沉淀知识',state.status.learned,'篇','✧'],
-    ['等待认真阅读',state.status.unread,'篇','◷'], ['语义索引已就绪',state.status.indexed,'篇','⌘']
+    ['全部收藏',state.status.total,'篇','▤'], ['已生成重点',state.status.learned,'篇','✧'],
+    ['等待阅读',state.status.unread,'篇','◷']
   ].map(([label,value,unit,icon]) => `<div class="stat"><div class="stat-label">${label}</div><div class="stat-value">${value}<span>${unit}</span></div><span class="stat-decoration" aria-hidden="true">${icon}</span></div>`).join('');
 }
 
@@ -78,7 +85,7 @@ async function refreshPrefs() {
 }
 
 async function renderHome() {
-  const [recent, priority] = await Promise.all([api('/articles?limit=5'), api('/articles?sort=priority&unread=true&limit=3')]);
+  const [recent, priority] = await Promise.all([api('/articles?limit=6'), api('/articles?sort=priority&unread=true&limit=3')]);
   $('#home-priority').innerHTML = priority.articles.length ? priority.articles.map(readingCard).join('') : empty(state.status.total ? '阅读队列已经清空' : '第一份值得保存的知识，从这里开始', state.status.total ? '你的收藏都已读过。新的内容随时可以加入。' : '粘贴一篇 X 长文或文章全文。它会成为你未来能够找回的方法。');
   $('#home-recent').innerHTML = recent.articles.length ? recent.articles.map(articleRow).join('') : empty('这里将保存你的好内容', '收藏时保留原文，提问时重新找到它。');
 }
@@ -181,18 +188,22 @@ function knowledgeHTML(card, index) {
 }
 async function openArticle(id, evidence=null) {
   try {
-    state.current = await api('/articles/' + encodeURIComponent(id)); state.evidence = evidence; state.readerMode = evidence ? 'original' : 'quick';
+    const dialog = $('#reader-dialog');
+    const preserve = dialog.open && state.current?.id === id && !evidence;
+    const scrollTop = preserve ? dialog.scrollTop : 0;
+    state.current = await api('/articles/' + encodeURIComponent(id));
+    if (!preserve) { state.evidence = evidence; state.readerMode = evidence ? 'original' : 'quick'; }
     const a = state.current; const link = safeURL(a.url);
-    $('#reader-header').innerHTML = `${topicTag(a)}<h2>${h(a.title)}</h2><div class="reader-meta"><span>${h(a.author || '作者未填写')}</span><span>收藏于 ${date(a.saved_at)}</span>${a.published_at ? `<span>发布 ${h(a.published_at.slice(0,10))}</span>` : ''}${link ? `<a href="${h(link)}" target="_blank" rel="noopener noreferrer">打开原文 ↗</a>` : '<span>用户手工输入 · 无外部链接</span>'}${badge(a)}</div><div class="reader-tags">${a.tags.map((tag) => `<span>${h(tag)}</span>`).join('')}</div>${a.extraction_note ? `<div class="reader-notice">${h(a.extraction_note)}</div>` : ''}${a.ai_error ? `<div class="reader-notice">${h(a.ai_error)}</div>` : ''}`;
+    $('#reader-header').innerHTML = `${topicTag(a)}<h2 id="reader-title">${h(a.title)}</h2><div class="reader-meta"><span>${h(a.author || '作者未填写')}</span><span>收藏于 ${date(a.saved_at)}</span>${link ? `<a href="${h(link)}" target="_blank" rel="noopener noreferrer">打开原文 ↗</a>` : '<span>手工收藏</span>'}${badge(a)}</div><div class="reader-tags">${a.tags.map((tag) => `<span>${h(tag)}</span>`).join('')}</div>${a.status === 'needs_content' || a.ai_error ? `<div class="reader-notice">${h(a.ai_error || a.extraction_note || '尚未取得全文，请补充正文后再分析。')}</div>` : a.extraction_note ? `<details class="source-details"><summary>采集说明</summary><p>${h(a.extraction_note)}</p></details>` : ''}`;
     $('#read-toggle').textContent = a.is_read ? '标为未读' : '标为已读';
-    renderReader(); showDialog('reader-dialog');
-    requestAnimationFrame(() => $('#reader-content mark')?.scrollIntoView({block:'center'}));
+    renderReader(); showDialog('reader-dialog'); dialog.scrollTop = scrollTop;
+    if (evidence) requestAnimationFrame(() => $('#reader-content mark')?.scrollIntoView({block:'center'}));
   } catch (error) { toast(error.message); }
 }
 function renderReader() {
   const a = state.current;
   if (!a) return;
-  document.querySelectorAll('[data-reader-mode]').forEach((el) => el.classList.toggle('active',el.dataset.readerMode === state.readerMode));
+  document.querySelectorAll('[data-reader-mode]').forEach((el) => { const active = el.dataset.readerMode === state.readerMode; el.classList.toggle('active',active); el.setAttribute('aria-pressed',String(active)); });
   const content = $('#reader-content');
   if (state.readerMode === 'original') {
     let raw = h(a.content);
@@ -208,11 +219,15 @@ function renderReader() {
     return;
   }
   if (!a.analysis) {
-    let message = a.status === 'queued' || a.status === 'processing' ? '后台正在处理。可以先阅读原文，完成后重新打开此收藏。' : !state.status.llm_enabled ? '尚未配置语言模型。原文已保存；在服务端 .env 中配置模型并重启后，点击“重新处理”。' : a.ai_error || '尚未生成分析，请先补全文或重新处理。';
-    content.innerHTML = empty('知识正在等你读懂',message,'') + (a.embedding_error ? `<p class="import-note">${h(a.embedding_error)}</p>` : ''); return;
+    let message = a.status === 'queued' || a.status === 'processing' ? '后台正在处理。可以先阅读原文，完成后会自动显示摘要。' : !state.status.llm_enabled ? '尚未配置语言模型。原文已保存；在服务端 .env 中配置模型并重启后，点击“重新处理”。' : a.ai_error || '尚未生成分析，请先补全文或重新处理。';
+    const title = ['queued','processing'].includes(a.status) ? '正在整理文章重点' : a.status === 'needs_content' ? '还需要完整正文' : '暂时没有重点摘要';
+    content.innerHTML = empty(title,message,'') + `<button class="button" data-reader-mode="original">先看已保存的原文 →</button>` + (a.embedding_error ? `<p class="import-note">${h(a.embedding_error)}</p>` : ''); return;
   }
   const analysis = a.analysis;
-  content.innerHTML = analysis[state.readerMode].map(pointHTML).join('');
+  if (state.readerMode === 'quick') {
+    const methods = analysis.knowledge.slice(0,2);
+    content.innerHTML = `<section class="summary-lead"><div class="summary-kicker">30 秒读懂</div><h3>这篇文章讲什么</h3>${analysis.quick.map((point) => `<p>${h(point.text)}</p><div>${point.evidence.map((e) => citation(e,'核对原文')).join('')}</div>`).join('')}</section><section class="summary-section"><div class="summary-section-heading"><h3>记住这几个要点</h3>${analysis.standard.length > 3 ? `<button data-reader-mode="standard" class="text-button">查看全部 ${analysis.standard.length} 个要点 →</button>` : ''}</div><div class="takeaway-list">${analysis.standard.slice(0,3).map((point,i) => `<div class="takeaway"><span class="takeaway-number">${i+1}</span><div><h4>${h(point.label)}</h4><p>${h(point.text)}</p>${point.evidence.map((e) => citation(e,'原文依据')).join('')}</div></div>`).join('')}</div></section>${methods.length ? `<section class="summary-section"><div class="summary-section-heading"><h3>可以怎么做</h3>${analysis.knowledge.length > 2 ? `<button data-reader-mode="deep" class="text-button">全部 ${analysis.knowledge.length} 个方法 →</button>` : ''}</div>${methods.map((card) => `<div class="action-card"><h4>${h(card.problem)}</h4><p>${h(card.method)}</p>${card.steps.length ? `<details class="action-steps"><summary>展开 ${card.steps.length} 个执行步骤</summary><ol>${card.steps.map((step) => `<li>${h(step)}</li>`).join('')}</ol></details>` : ''}${card.evidence.map((e) => citation(e,'方法出处')).join('')}</div>`).join('')}</section>` : ''}<button class="button summary-more" data-reader-mode="standard">继续看 3 分钟精读 →</button>`;
+  } else content.innerHTML = analysis[state.readerMode].map(pointHTML).join('');
   if (state.readerMode === 'deep') content.insertAdjacentHTML('beforeend', `<h3>可调用的方法卡</h3>${analysis.knowledge.map(knowledgeHTML).join('')}<h3>阅读价值 · ${a.priority?.toFixed(1) || '—'} / 5</h3><div class="rating-grid">${Object.entries(analysis.ratings).map(([key,value]) => `<div class="rating-item">${h(ratingNames[key] || key)}<strong>${value.score}/5</strong><p>${h(value.reason)}</p></div>`).join('')}</div>`);
   content.insertAdjacentHTML('beforeend', `<div class="credibility-note">${h(analysis.credibility)}</div><p class="import-note">AI 对原文的整理，不代表外部事实已经核验。引用可核对原文，但不能保证推论全部正确。${a.analysis_model ? ' · 模型 ' + h(a.analysis_model) : ''}</p>`);
 }
@@ -394,7 +409,7 @@ document.addEventListener('click',(event) => {
   if (target.dataset.action === 'import') openImport();
   if (target.dataset.action === 'settings') openSettings();
   if (target.dataset.importMode) setImportMode(target.dataset.importMode);
-  if (target.dataset.readerMode) { state.readerMode = target.dataset.readerMode; if (state.readerMode !== 'original') state.evidence = null; renderReader(); }
+  if (target.dataset.readerMode) { state.readerMode = target.dataset.readerMode; if (state.readerMode !== 'original') state.evidence = null; renderReader(); $('#reader-dialog').scrollTop = 0; }
   if (target.dataset.article) { event.preventDefault(); openArticle(target.dataset.article); }
   if (target.dataset.citation) { const evidence = state.citations.get(target.dataset.citation); if (evidence) openArticle(evidence.article_id,evidence); }
   if (target.dataset.category) { event.preventDefault(); state.category = target.dataset.category; $('#category-filter').value = state.category; if (location.hash === '#library') renderLibrary().catch((e) => toast(e.message)); else location.hash = 'library'; }

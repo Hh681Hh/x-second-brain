@@ -7,8 +7,8 @@
   <meta name="description" content="把收藏变成随时可调用的知识。原文保存、深度阅读、带出处的知识问答。">
   <title>X Second Brain · 让收藏产生回响</title>
   <link rel="icon" href="/static/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/static/styles.css?v=0.2.0">
-  <script src="/static/app.js?v=0.2.0" defer></script>
+  <link rel="stylesheet" href="/static/styles.css?v=0.3.5">
+  <script src="/static/app.js?v=0.3.5" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -22,7 +22,7 @@
         <a href="#priority" data-route="priority"><span class="nav-symbol">◷</span>阅读队列</a>
         <a href="#chat" data-route="chat"><span class="nav-symbol">✧</span>问问知识库</a>
         <a href="#network" data-route="network"><span class="nav-symbol">⌘</span>知识关联</a>
-        <a href="#sync" data-route="sync"><span class="nav-symbol">↻</span>X 自动同步</a>
+        <a href="/" target="_blank" rel="noopener"><span class="nav-symbol">↻</span>插件连接</a>
       </nav>
       <div class="nav-section-label">我的主题 <button class="icon-button" data-action="settings" aria-label="编辑主题">＋</button></div>
       <nav id="category-nav" class="category-nav" aria-label="主题分类"></nav>
@@ -37,23 +37,20 @@
       <main id="main" tabindex="-1">
         <div id="connection-error" class="banner error" hidden></div>
         <section id="view-home" class="view">
-          <div class="page-heading"><div><div class="eyebrow">YOUR PERSONAL KNOWLEDGE SPACE</div><h1>让收藏，真正为你所用。</h1><p>读懂当下的好内容，找回未来需要的方法。</p></div><span class="date-label" id="today-label"></span></div>
-          <div class="ask-hero">
-            <div class="hero-orbit" aria-hidden="true"><span>✧</span></div>
-            <div class="hero-copy"><span class="small-label">从一个问题开始</span><h2>答案，也许就在你的收藏里。</h2><p>描述你正在面对的问题，让过去读到的知识重新连接。</p></div>
-            <form id="home-ask-form" class="ask-input"><label for="home-question" class="sr-only">向收藏知识库提问</label><input id="home-question" placeholder="我想为业务搭建自动客服，有哪些可借鉴的方法？" minlength="2" maxlength="2000" required><button class="send-button" aria-label="发送问题">↗</button></form>
-            <div class="hero-footer"><span><span class="tiny-dot"></span> 依据你的真实收藏回答</span><span>每个重要结论，都有出处 ↗</span></div>
-          </div>
+          <div class="page-heading"><div><div class="eyebrow">我的知识库</div><h1>收藏的内容，重点读懂。</h1><p>点击一篇收藏，直接看总结、关键要点和行动方法。</p></div><span class="date-label" id="today-label"></span></div>
           <div class="stats-grid" id="stats-grid"></div>
-          <div class="section-heading"><div><h2>把下一次阅读，留给值得的内容<span class="subtle-tag">阅读队列</span></h2><p>结合证据、实操性与长期价值，少一点囤积，多一点消化。</p></div><a href="#priority" class="text-link">查看队列 <span>→</span></a></div>
-          <div id="home-priority" class="reading-grid"></div>
-          <div class="section-heading"><div><h2>最近进入你的知识库</h2><p>收藏只是开始。知识会随着你的问题再次被找到。</p></div><a href="#library" class="text-link">全部收藏 →</a></div>
+          <div class="section-heading"><div><h2>最近收藏</h2><p>已分析的文章会显示摘要；点击卡片查看完整重点。</p></div><a href="#library" class="text-link">查看全部 →</a></div>
           <div id="home-recent" class="article-list"></div>
-          <div class="quiet-footer"><span>收集灵感</span><i></i><span>理解方法</span><i></i><span>调用知识</span><span class="footer-note">一个属于你的长期思考空间</span></div>
+          <div class="ask-hero compact-ask">
+            <div class="hero-copy"><h2>遇到问题，问问你的收藏</h2><p>不用记住标题和作者，用自己的话描述问题。</p></div>
+            <form id="home-ask-form" class="ask-input"><label for="home-question" class="sr-only">向收藏知识库提问</label><input id="home-question" placeholder="例如：如何把自己的经验做成数字产品？" minlength="2" maxlength="2000" required><button class="send-button" aria-label="发送问题">↗</button></form>
+          </div>
+          <div class="section-heading"><div><h2>值得接着读</h2><p>根据文章的实操性与长期价值推荐。</p></div><a href="#priority" class="text-link">阅读队列 →</a></div>
+          <div id="home-priority" class="reading-grid"></div>
         </section>
 
         <section id="view-library" class="view" hidden>
-          <div class="page-heading"><div><div class="eyebrow">THE COLLECTION</div><h1 id="library-title">全部收藏</h1><p>保留原文、作者与方法，让每一份知识有迹可循。</p></div><button class="button primary" data-action="import">＋ 添加收藏</button></div>
+          <div class="page-heading"><div><div class="eyebrow">我的知识库</div><h1 id="library-title">全部收藏</h1><p>每篇都有重点可读。按主题筛选，或直接描述你想解决的问题。</p></div><button class="button primary" data-action="import">＋ 添加收藏</button></div>
           <form id="search-form" class="search-bar"><span aria-hidden="true">⌕</span><label for="search-query" class="sr-only">搜索文章或描述问题</label><input id="search-query" placeholder="搜索标题、标签，或用自己的话描述一个问题…" minlength="2" maxlength="2000"><button class="button" type="submit">检索</button></form>
           <div class="filter-row"><label class="select-label">主题 <select id="category-filter"><option value="">全部主题</option></select></label><label class="check-label"><input type="checkbox" id="unread-filter"> 只看未读</label><label class="select-label sort-select">排序 <select id="sort-filter"><option value="recent">最近收藏</option><option value="priority">阅读价值</option></select></label></div>
           <div id="search-meta" class="search-meta" aria-live="polite"></div><div id="library-results"></div>
@@ -88,7 +85,7 @@
 
   <dialog id="import-dialog" class="modal"><div class="dialog-heading"><div><span class="small-label">CAPTURE A GOOD IDEA</span><h2 id="import-title">把值得的内容，留在这里。</h2></div><button class="icon-button" data-close="import-dialog" aria-label="关闭收藏窗口">×</button></div><div class="tabs" id="import-tabs"><button data-import-mode="link" class="active">链接收藏</button><button data-import-mode="text">粘贴全文</button><button data-import-mode="batch">批量链接</button></div><form id="import-form"><div id="import-fields"></div><div class="import-note" id="import-note"></div><div id="import-result" class="inline-result" aria-live="polite"></div><div class="dialog-footer"><button type="button" class="button" data-close="import-dialog">取消</button><button class="button primary" id="import-submit">保存并学习 →</button></div></form></dialog>
 
-  <dialog id="reader-dialog" class="reader"><div class="reader-top"><span class="small-label">YOUR KNOWLEDGE · 个人藏书</span><button class="icon-button" data-close="reader-dialog" aria-label="关闭阅读器">×</button></div><div id="reader-header"></div><div class="tabs reader-tabs" id="reader-tabs"><button data-reader-mode="quick" class="active">30 秒速读</button><button data-reader-mode="standard">3 分钟精读</button><button data-reader-mode="deep">深度分析</button><button data-reader-mode="original">原文</button></div><div id="reader-content" class="reader-content"></div><div class="reader-bottom"><button class="button" id="read-toggle">标为已读</button><button class="button" id="reader-edit">编辑内容</button><button class="button" id="reader-retry">重新处理</button><button class="icon-button danger" id="reader-delete" aria-label="删除这篇收藏">⌫</button></div></dialog>
+  <dialog id="reader-dialog" class="reader" aria-labelledby="reader-title"><div class="reader-top"><span class="small-label">收藏解读</span><button class="icon-button" data-close="reader-dialog" aria-label="关闭阅读器">×</button></div><div id="reader-header"></div><div class="tabs reader-tabs" id="reader-tabs" aria-label="阅读方式"><button data-reader-mode="quick" class="active" aria-pressed="true">重点摘要</button><button data-reader-mode="standard" aria-pressed="false">3 分钟精读</button><button data-reader-mode="deep" aria-pressed="false">深度分析</button><button data-reader-mode="original" aria-pressed="false">原文</button></div><div id="reader-content" class="reader-content"></div><div class="reader-bottom"><button class="button" id="read-toggle">标为已读</button><button class="button" id="reader-edit">编辑内容</button><button class="button" id="reader-retry">重新处理</button><button class="icon-button danger" id="reader-delete" aria-label="删除这篇收藏">⌫</button></div></dialog>
 
   <dialog id="edit-dialog" class="modal"><div class="dialog-heading"><h2>修订收藏</h2><button class="icon-button" data-close="edit-dialog" aria-label="关闭编辑窗口">×</button></div><form id="edit-form"><label class="field">标题<input id="edit-title" required maxlength="300"></label><div class="field-row"><label class="field">作者<input id="edit-author" maxlength="200"></label><label class="field">发布时间<input id="edit-published" maxlength="80" placeholder="未知可留空"></label></div><label class="field">主题<select id="edit-category"></select></label><label class="field">标签（逗号分隔）<input id="edit-tags" maxlength="600"></label><label class="field">完整正文<textarea id="edit-content" rows="10" minlength="20" maxlength="120000" required></textarea></label><div class="import-note">修改正文或标题会重新分析与建立索引；修改标签和主题不会产生 AI 费用。</div><div class="dialog-footer"><button type="button" class="button" data-close="edit-dialog">取消</button><button class="button primary">保存修改</button></div></form></dialog>
 
