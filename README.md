@@ -6,7 +6,7 @@
 
 原创 MIT 项目，由 **Manifest V3 插件 + Python 后台 + SQLite 知识库 + Codex Skill** 组成。插件与本地存储免费；Codex、其他模型及可选 X 官方 API 的额度或费用由对应服务决定。
 
-> **当前版本：0.3.3。** 默认只保存页面已经加载的文字。可选 FxEmbed 免费公开接口可以在后台补取未展开的公开长文，默认关闭。2026-10-21 已实际验证“未展开卡片原生书签点击 → 31,021 字符全文 → 真实 Codex 分析分类 → Skill 检索及带引用问答”。测试范围与限制见 [验证记录](docs/FREE_FULLTEXT.md)。
+> **当前版本：0.3.4。** 默认只保存页面已经加载的文字。可选 FxEmbed 免费公开接口可以在后台补取未展开的公开长文，默认关闭。2026-10-21 已实际验证“未展开卡片原生书签点击 → 31,021 字符全文 → 真实 Codex 分析分类 → Skill 检索及带引用问答”。测试范围与限制见 [验证记录](docs/FREE_FULLTEXT.md)。
 
 ## 能做什么
 
@@ -30,7 +30,7 @@
 
 ### Windows 下载后安装（推荐）
 
-1. 从 [最新发布](https://github.com/Hh681Hh/x-second-brain/releases/latest) 下载 `x-second-brain-0.3.3-source.zip`，解压到一个固定目录。
+1. 从 [最新发布](https://github.com/Hh681Hh/x-second-brain/releases/latest) 下载 `x-second-brain-0.3.4-source.zip`，解压到一个固定目录。
 2. 安装 Python 3.11+；需要 AI 阅读时准备已安装并登录的 Codex CLI（`codex login`）。未准备好时仍可手动收藏及全文搜索。
 3. 双击根目录的 `install-windows.cmd`。安装器创建虚拟环境、安装依赖、生成本地配置、安装 Codex Skill、注册当前用户自启并打开连接页；不会覆盖已有 `.env`、数据库或 Skill。
 4. 按下方步骤在 Chrome / Edge 加载 `xsecondbrain/browser_extension`，配对一次，刷新 X 页面。
@@ -189,6 +189,16 @@ X 原生书签点击 → MV3 插件 → 本地接收 / 去重 / 队列
 
 [设计与数据结构](docs/DESIGN.md) · [竞品调研](docs/RESEARCH.md) · [后台与权限](docs/BACKGROUND.md)
 
+## 升级已有索引
+
+更新代码并重启后台后，已有收藏可执行以下命令，利用已保存的知识卡重建检索索引，无需再次调用阅读模型。原文、分析与引用位置保持不变。本地向量模型不产生 API 费用；使用远程 Embedding 时仍按供应商计费。
+
+```powershell
+& ./.venv/Scripts/python.exe scripts/reindex_saved.py --all
+```
+
+也可使用 `--article <文章ID>` 只更新一篇已分析的收藏。
+
 ## 测试与开发
 
 ```powershell
@@ -196,7 +206,9 @@ X 原生书签点击 → MV3 插件 → 本地接收 / 去重 / 队列
 node --test tests/browser_extension.test.cjs
 ```
 
-2026-10-22 已通过 82 项 Python 测试、9 项插件 Node 测试。真实模型/外网测试需显式启用，默认 CI 不使用个人账号或付费额度。公开 Article 隔离测试取得 16,484 字符正文，22 处引文通过原文偏移验证。随后真实 Chrome 未展开卡片书签测试取得 31,021 字符，218 段均与可见 X 正文匹配，24 处分析引用及 6 处问答引用通过原文核对；实际分类为“其他知识”，标签包括个人成长、目标管理。详见 [全文验证](docs/FREE_FULLTEXT.md)。
+2026-10-22 已通过 84 项 Python 测试、9 项插件 Node 测试。真实模型/外网测试需显式启用，默认 CI 不使用个人账号或付费额度。公开 Article 隔离测试取得 16,484 字符正文，22 处引文通过原文偏移验证。随后真实 Chrome 未展开卡片书签测试取得 31,021 字符，218 段均与可见 X 正文匹配，24 处分析引用及 6 处问答引用通过原文核对；实际分类为“其他知识”，标签包括个人成长、目标管理。详见 [全文验证](docs/FREE_FULLTEXT.md)。
+
+最新用户验收：从 GitHub 实际下载并安装发布包，网页保存与重启持久化通过；真实 Chrome 未展开正文点击原生书签，自动补取 16,484 字符、分析并分类为“获客与营销”。中文问题找回英文文章排名第 1，真实 Skill 问答的 3 处该文引文通过原文核对，网页点击引用能定位正文。修复了旧索引中文知识描述截断导致的漏召回。
 
 [测试范围与复现方法](docs/TESTING.md) · [贡献指南](CONTRIBUTING.md) · [安全说明](SECURITY.md) · [更新记录](CHANGELOG.md)
 

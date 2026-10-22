@@ -8,7 +8,7 @@ from uuid import uuid4
 
 from .collectors import collect
 from .db import decode_article, dumps, now
-from .knowledge import analyze_article, answer_question, split_chunks, tokenize
+from .knowledge import analyze_article, answer_question, split_chunks, tokenize, search_documents
 from .models import ArticleInput
 from .search import Search
 from .security import UserError, normalize_url
@@ -191,15 +191,7 @@ class KnowledgeService:
             # Existing validated analysis can survive a re-index without an LLM, but not an edit.
             if analysis and any(e['chunk_id'] not in {c['id'] for c in chunks} for mode in ('quick','standard','deep','knowledge') for point in analysis[mode] for e in point['evidence']):
                 analysis = None
-        augmented = {c['id']: article['title'] + '\n' + c['text'] for c in chunks}
-        semantic_context = {c['id']: '' for c in chunks}
-        if analysis:
-            for card in analysis['knowledge']:
-                enrichment = '\n问题：' + card['problem'] + '\n方法：' + card['method'] + '\n' + '；'.join(card['steps'])
-                for evidence in card['evidence']:
-                    if evidence['chunk_id'] in augmented:
-                        augmented[evidence['chunk_id']] += enrichment
-                        semantic_context[evidence['chunk_id']] += card['problem'][:25] + ' ' + card['method'][:25]
+        augmented, vector_texts = search_documents(article['title'], chunks, analysis)
         with self.db.connect() as conn:
             conn.execute('BEGIN IMMEDIATE')
             if not conn.execute('SELECT 1 FROM articles WHERE id=? AND revision=?', (article_id, revision)).fetchone():
@@ -211,9 +203,6 @@ class KnowledgeService:
         embedding_error = ''
         if self.settings.embedding_provider != 'none':
             try:
-                # Keep source + a short problem-oriented hint inside the local model's
-                # 512-token window; the complete method remains in the FTS index.
-                vector_texts = [article['title'][:35]+'\n'+semantic_context[c['id']][:50]+'\n'+c['text'] for c in chunks]
                 vectors = self.embeddings.encode(vector_texts)
                 with self.db.connect() as conn:
                     conn.execute('BEGIN IMMEDIATE')

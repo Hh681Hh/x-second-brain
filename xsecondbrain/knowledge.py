@@ -41,6 +41,35 @@ def split_chunks(article_id, content, revision=1, size=400, overlap=70):
     return chunks
 
 
+def search_documents(title, chunks, analysis):
+    """Index grounded methods in the reading language; keep source chunks verbatim.
+
+    A 50-character hint beside a long English passage loses the Chinese method
+    inside the small local embedding window. Attach the complete validated card
+    to its cited chunks, and embed the card first. Search still returns the
+    original chunk text and offsets, never the generated retrieval context.
+    """
+    contexts = {c['id']: [] for c in chunks}
+    if analysis:
+        for card in analysis['knowledge']:
+            parts = []
+            for field in ('problem', 'method', 'why', 'scenarios', 'prerequisites', 'steps', 'limitations'):
+                value = card.get(field, '')
+                parts.append('；'.join(value) if isinstance(value, list) else value)
+            context = '\n'.join(parts)
+            for evidence in card['evidence']:
+                cid = evidence['chunk_id']
+                if cid in contexts and context not in contexts[cid]:
+                    contexts[cid].append(context)
+    lexical, vectors = {}, []
+    for chunk in chunks:
+        context = '\n'.join(contexts[chunk['id']])
+        source = title + '\n' + chunk['text']
+        lexical[chunk['id']] = source + ('\n' + context if context else '')
+        vectors.append(context[:450] if context else title[:35] + '\n' + chunk['text'])
+    return lexical, vectors
+
+
 def validate_evidence(evidence, chunks):
     by_id = {c['id']: c for c in chunks}
     resolved = []

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "X 书签助手 · 本地知识库",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "把你在电脑 X 网页亲手收藏的已加载内容交给本机 Codex 阅读分类。免费开源，无需 X API。",
   "permissions": ["storage", "alarms"],
   "host_permissions": ["https://x.com/*", "https://www.x.com/*", "https://twitter.com/*", "https://www.twitter.com/*", "http://127.0.0.1/*", "http://localhost/*"],

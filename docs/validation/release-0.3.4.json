@@ -1,0 +1,50 @@
+{
+  "version": "0.3.4",
+  "date": "2026-10-22",
+  "python_tests": {
+    "passed": 84,
+    "integration_deselected": 4
+  },
+  "node_tests": {
+    "passed": 9
+  },
+  "public_release_download_install": {
+    "source_version": "0.3.3",
+    "anonymous_download_and_sha256": "passed",
+    "clean_basic_install": "passed",
+    "web_manual_import_and_keyword_search": "passed",
+    "service_restart_persistence": "passed",
+    "unconfigured_ai_notice": "passed"
+  },
+  "native_bookmark": {
+    "existing_paired_chrome": true,
+    "body_manually_expanded": false,
+    "manual_import_calls": 0,
+    "content_characters": 16484,
+    "actual_codex_analysis": "passed",
+    "category": "获客与营销",
+    "verified_analysis_quotes": 21
+  },
+  "retrieval_fix": {
+    "chinese_question_english_source": "passed after fix",
+    "target_chunk_ranks": [
+      1,
+      5
+    ],
+    "existing_articles_reindexed": 67,
+    "new_llm_calls_for_reindex": 0,
+    "raw_source_and_analysis_preserved": true
+  },
+  "actual_installed_skill_answer": {
+    "mode": "ai",
+    "verified_target_quotes": 3,
+    "web_citation_locates_source": "passed"
+  },
+  "limits": [
+    "Third-party public fulltext is opt-in and not guaranteed.",
+    "Browser extension initial installation and pairing remain manual.",
+    "No actual Windows reboot test.",
+    "Cloud CI not enabled."
+  ],
+  "privacy": "No personal knowledge database, credentials, browser data or local logs included."
+}

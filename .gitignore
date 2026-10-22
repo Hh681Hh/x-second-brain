@@ -30,3 +30,5 @@ docs/DEPLOYMENT-*.md
 docs/validation/*
 !docs/validation/release-0.3.2.json
 !docs/validation/release-0.3.3.json
+
+!docs/validation/release-0.3.4.json
