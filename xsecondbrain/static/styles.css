@@ -142,4 +142,13 @@ body:has(dialog[open]) {overflow:hidden}
 .text-button:hover {text-decoration:underline}
 .action-steps {margin-top:12px}
 .action-steps summary {cursor:pointer;font-size:13px;color:#587a66;line-height:1.9;padding:4px 0}
+.learning-status {display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 20px;border:1px solid #dfe8e2;background:#f2f7f3;border-radius:12px;margin-bottom:26px}
+.learning-copy {min-width:0}
+.learning-copy strong {font-size:14px;color:#3b6151;font-weight:600}
+.learning-copy strong span {margin-right:5px}
+.learning-copy p {font-size:12px;line-height:1.9;color:#6d7f75;margin-top:5px;overflow-wrap:anywhere}
+.learning-copy .learning-pending {color:#92703e}
+.learning-status .button {flex-shrink:0;font-size:12px;background:#fff}
+.learning-hint {font-size:11px;color:#7a8e82;white-space:nowrap}
+@media(max-width:680px){.learning-status {padding:16px;gap:10px;align-items:flex-start;flex-wrap:wrap}.learning-copy strong {font-size:13px}.learning-copy p {font-size:11px}.learning-status .button {min-height:36px;font-size:11px}.learning-hint {font-size:10px}}
 @media(max-width:680px){.text-button {font-size:11px}.summary-section-heading {align-items:flex-start}}

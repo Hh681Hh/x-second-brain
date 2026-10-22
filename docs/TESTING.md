@@ -9,7 +9,7 @@ python -m pytest -q -m 'not integration'
 node --test tests/browser_extension.test.cjs
 ```
 
-本机 Python 3.12：84 项通过，4 项真实集成测试未选入；Node 插件测试 9 项通过。仓库附带 Windows 与 Ubuntu 的 Actions 模板；本次上传凭证缺少 workflow scope，云端 CI 尚未启用，不宣称远程测试通过。启用方法见 [.github/workflow-templates/README.md](../.github/workflow-templates/README.md)。
+本机 Python 3.12：87 项通过，4 项真实集成测试未选入；Node 插件测试 9 项通过。仓库附带 Windows 与 Ubuntu 的 Actions 模板；本次上传凭证缺少 workflow scope，云端 CI 尚未启用，不宣称远程测试通过。启用方法见 [.github/workflow-templates/README.md](../.github/workflow-templates/README.md)。
 
 覆盖：原文持久化与去重、预览补全、导入导出、全文检索、引用校验、无模型降级、后台队列与并发、插件配对及权限、网络失败保留原文、OAuth 协议夹具、全文接口开关与身份检查、Windows 守护启动决策。HTTP/模型夹具用于验证协议与边界，不代表真实外部服务已接通。
 
@@ -34,6 +34,13 @@ node --test tests/browser_extension.test.cjs
 ## 0.3.5 工作台阅读验收
 
 使用真实已分析收藏验证：首页列表展示保存的摘要，点击默认重点摘要，全部要点、精读、深度方法卡、原文切换可用，摘要引用仍定位并高亮真实原文。缺少全文的旧收藏显示明确提示，不生成替代摘要。390×844 浏览器视口检查通过，无阅读器横向溢出，随后恢复默认尺寸；这不等于真实 iPhone Safari 验收。此界面更新复用已有分析，验收未再次调用阅读模型。
+
+## 0.3.6 收藏即学习反馈验收
+
+- 新增 3 项隔离回归：AI 整理与人的已读状态分开统计、方法卡与待处理数量、筛选组合及分页、工作台 HTML 缓存校验。
+- 实际打开本机工作台，核对真实已分析收藏的摘要与分类，以及待补全文列表和未生成分析的提示。
+- 在独立无模型测试服务打开空库首页，初始队列为 0；通过真实保存接口加入明确标记的原创样例，页面未重载即可显示新收藏，同时维持“AI 已整理 0”和“仅存原文”的提示。此项验证空闲刷新与降级，未伪造模型响应。
+- 本轮复用已保存分析检查一篇真实长文，21 处引文与保存原文的字符位置逐字匹配；原生书签和真实模型链路的验收范围见前节。
 
 ## 显式集成测试
 

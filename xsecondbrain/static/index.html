@@ -7,8 +7,8 @@
   <meta name="description" content="把收藏变成随时可调用的知识。原文保存、深度阅读、带出处的知识问答。">
   <title>X Second Brain · 让收藏产生回响</title>
   <link rel="icon" href="/static/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/static/styles.css?v=0.3.5">
-  <script src="/static/app.js?v=0.3.5" defer></script>
+  <link rel="stylesheet" href="/static/styles.css?v=0.3.6">
+  <script src="/static/app.js?v=0.3.6" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">跳到主要内容</a>
@@ -37,8 +37,9 @@
       <main id="main" tabindex="-1">
         <div id="connection-error" class="banner error" hidden></div>
         <section id="view-home" class="view">
-          <div class="page-heading"><div><div class="eyebrow">我的知识库</div><h1>收藏的内容，重点读懂。</h1><p>点击一篇收藏，直接看总结、关键要点和行动方法。</p></div><span class="date-label" id="today-label"></span></div>
+          <div class="page-heading"><div><div class="eyebrow">我的知识库</div><h1>收藏即学习。</h1><p>在 X 点书签，后台自动整理。点开看重点，需要时直接提问。</p></div><span class="date-label" id="today-label"></span></div>
           <div class="stats-grid" id="stats-grid"></div>
+          <section id="learning-status" class="learning-status" aria-label="自动学习状态" aria-live="polite"></section>
           <div class="section-heading"><div><h2>最近收藏</h2><p>已分析的文章会显示摘要；点击卡片查看完整重点。</p></div><a href="#library" class="text-link">查看全部 →</a></div>
           <div id="home-recent" class="article-list"></div>
           <div class="ask-hero compact-ask">
@@ -50,9 +51,9 @@
         </section>
 
         <section id="view-library" class="view" hidden>
-          <div class="page-heading"><div><div class="eyebrow">我的知识库</div><h1 id="library-title">全部收藏</h1><p>每篇都有重点可读。按主题筛选，或直接描述你想解决的问题。</p></div><button class="button primary" data-action="import">＋ 添加收藏</button></div>
+          <div class="page-heading"><div><div class="eyebrow">我的知识库</div><h1 id="library-title">全部收藏</h1><p>按主题查看文章重点，或直接描述你想解决的问题。</p></div><button class="button primary" data-action="import">＋ 添加收藏</button></div>
           <form id="search-form" class="search-bar"><span aria-hidden="true">⌕</span><label for="search-query" class="sr-only">搜索文章或描述问题</label><input id="search-query" placeholder="搜索标题、标签，或用自己的话描述一个问题…" minlength="2" maxlength="2000"><button class="button" type="submit">检索</button></form>
-          <div class="filter-row"><label class="select-label">主题 <select id="category-filter"><option value="">全部主题</option></select></label><label class="check-label"><input type="checkbox" id="unread-filter"> 只看未读</label><label class="select-label sort-select">排序 <select id="sort-filter"><option value="recent">最近收藏</option><option value="priority">阅读价值</option></select></label></div>
+          <div class="filter-row"><label class="select-label">主题 <select id="category-filter"><option value="">全部主题</option></select></label><label class="check-label"><input type="checkbox" id="unread-filter"> 只看未读</label><label class="check-label"><input type="checkbox" id="attention-filter"> 只看待处理</label><label class="select-label sort-select">排序 <select id="sort-filter"><option value="recent">最近收藏</option><option value="priority">阅读价值</option></select></label></div>
           <div id="search-meta" class="search-meta" aria-live="polite"></div><div id="library-results"></div>
           <button class="button load-more" id="load-more" hidden>加载更多</button>
         </section>

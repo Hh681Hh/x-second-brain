@@ -108,7 +108,7 @@ def create_app(settings=None, start_worker=True):
         response.headers['Content-Security-Policy'] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
         if request.url.path.startswith('/api/'):
             response.headers['Cache-Control'] = 'no-store'
-        elif request.url.path == '/' or request.url.path.startswith('/static/'):
+        elif request.url.path in ('/', '/workbench', '/official-x') or request.url.path.startswith('/static/'):
             response.headers['Cache-Control'] = 'no-cache'
         return response
 
@@ -138,8 +138,13 @@ def create_app(settings=None, start_worker=True):
             unread = conn.execute('SELECT count(*) FROM articles WHERE is_read=0').fetchone()[0]
             indexed = conn.execute('SELECT count(DISTINCT article_id) FROM chunks WHERE embedding_model=?', (service.embeddings.signature,)).fetchone()[0]
             queued = conn.execute("SELECT count(*) FROM jobs WHERE state IN ('queued','running')").fetchone()[0]
+            counts = dict(conn.execute('SELECT status,count(*) FROM articles GROUP BY status').fetchall())
+            knowledge_cards = conn.execute("SELECT coalesce(sum(json_array_length(analysis_json,'$.knowledge')),0) FROM articles WHERE analysis_json IS NOT NULL").fetchone()[0]
+            latest_updated_at = conn.execute("SELECT coalesce(max(updated_at),'') FROM articles").fetchone()[0]
+        learning = {'knowledge_cards': knowledge_cards, 'needs_attention': sum(counts.get(key, 0) for key in ('needs_content','error','saved')),
+                    'needs_content': counts.get('needs_content', 0), 'failed': counts.get('error', 0), 'saved': counts.get('saved', 0), 'latest_updated_at': latest_updated_at}
         sync = xsync.status()
-        return {"total": total, "learned": learned, "unread": unread, "indexed": indexed, "queued": queued, "llm_enabled": settings.llm_enabled, "llm_model": settings.model_label if settings.llm_enabled else None, "llm_provider":settings.llm_provider,"headless":settings.headless,"pid":os.getpid(),"embedding_provider": settings.embedding_provider, "embedding_model": settings.embedding_model, "embedding_error": service.embeddings.error, "x_configured": bool(settings.x_bearer_token) or sync['connected'], "auth_required": bool(settings.app_token), "automatic_sync": sync['sync_enabled']}
+        return {"total": total, "learned": learned, "unread": unread, "indexed": indexed, "queued": queued, **learning, "llm_enabled": settings.llm_enabled, "llm_model": settings.model_label if settings.llm_enabled else None, "llm_provider":settings.llm_provider,"headless":settings.headless,"pid":os.getpid(),"embedding_provider": settings.embedding_provider, "embedding_model": settings.embedding_model, "embedding_error": service.embeddings.error, "x_configured": bool(settings.x_bearer_token) or sync['connected'], "auth_required": bool(settings.app_token), "automatic_sync": sync['sync_enabled']}
 
     @app.get('/api/summary')
     def summary():
@@ -195,7 +200,7 @@ def create_app(settings=None, start_worker=True):
         return db.preferences()
 
     @app.get('/api/articles')
-    def list_articles(category: str = '', tag: str = '', sort: str = 'recent', unread: bool = False, limit: int = 100, offset: int = 0):
+    def list_articles(category: str = '', tag: str = '', sort: str = 'recent', unread: bool = False, attention: bool = False, limit: int = 100, offset: int = 0):
         clauses, params = [], []
         if category:
             clauses.append('category=?')
@@ -205,6 +210,8 @@ def create_app(settings=None, start_worker=True):
             params.append(tag)
         if unread:
             clauses.append('is_read=0')
+        if attention:
+            clauses.append("status IN ('needs_content','error','saved')")
         where = ' WHERE ' + ' AND '.join(clauses) if clauses else ''
         order = 'priority IS NULL,priority DESC,saved_at DESC' if sort == 'priority' else 'saved_at DESC'
         with db.connect() as conn:

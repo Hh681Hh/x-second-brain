@@ -4,7 +4,7 @@ const $ = (selector) => document.querySelector(selector);
 const h = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safeURL = (value) => { try { const u = new URL(value); return ['http:', 'https:'].includes(u.protocol) ? u.href : ''; } catch { return ''; } };
 const date = (value) => { const d = new Date(value); return Number.isNaN(d.getTime()) ? '日期未知' : d.toLocaleDateString('zh-CN', {month:'2-digit',day:'2-digit'}); };
-const state = {route:'home', category:'', status:{}, prefs:{categories:[], interests:''}, articles:[], current:null, readerMode:'quick', evidence:null, importMode:'link', session:null, asking:false, search:false, offset:0, citations:new Map(), citeCounter:0, pendingQuestion:null};
+const state = {route:'home', category:'', status:{}, browser:{}, prefs:{categories:[], interests:''}, articles:[], current:null, readerMode:'quick', evidence:null, importMode:'link', session:null, asking:false, search:false, offset:0, citations:new Map(), citeCounter:0, pendingQuestion:null};
 const colors = ['#93a9ab','#b1a0be','#aeb8a0','#c3ab84','#a5b4cf','#abbbb9','#bea6a1','#a9b2bc'];
 const ratingNames = {novelty:'信息增量', credibility:'文中证据', relevance:'关注相关性', actionability:'实操价值', longevity:'长期价值'};
 let toastTimer;
@@ -64,15 +64,24 @@ function readingCard(article, index=0) {
 }
 
 async function refreshStatus() {
-  state.status = await api('/status');
+  [state.status, state.browser] = await Promise.all([api('/status'), api('/browser')]);
   $('#connection-error').hidden = true;
   $('#library-count').textContent = state.status.total;
   $('#model-status').textContent = state.status.llm_enabled ? 'AI 已配置' : '基础收藏模式';
   $('#model-status').classList.toggle('ready', state.status.llm_enabled);
   $('#stats-grid').innerHTML = [
-    ['全部收藏',state.status.total,'篇','▤'], ['已生成重点',state.status.learned,'篇','✧'],
-    ['等待阅读',state.status.unread,'篇','◷']
+    ['全部收藏',state.status.total,'篇','▤'], ['AI 已整理',state.status.learned,'篇','✧'],
+    ['知识与方法',state.status.knowledge_cards || 0,'条','◈']
   ].map(([label,value,unit,icon]) => `<div class="stat"><div class="stat-label">${label}</div><div class="stat-value">${value}<span>${unit}</span></div><span class="stat-decoration" aria-hidden="true">${icon}</span></div>`).join('');
+  const s = state.status;
+  const title = !s.llm_enabled ? '自动分析尚未配置' : s.queued ? `正在自动整理 ${s.queued} 篇收藏` : '后台自动整理已开启';
+  const notes = [state.browser.paired ? '浏览器插件已配对' : '浏览器插件尚未配对'];
+  if (state.browser.public_fulltext_provider === 'fxembed') notes.push('公开帖自动补全文已启用');
+  if (s.indexed) notes.push(`${s.indexed} 篇已建立语义索引`);
+  if (!s.llm_enabled) notes.push('目前只保存原文，配置模型后才能自动生成摘要与分类');
+  const pending = [[s.needs_content,'篇待补全文'],[s.failed,'篇分析失败'],[s.saved,'篇仅存原文']].filter(([count]) => count).map(([count,label]) => count + label);
+  $('#learning-status').classList.toggle('has-pending',Boolean(s.needs_attention));
+  $('#learning-status').innerHTML = `<div class="learning-copy"><strong><span aria-hidden="true">${s.queued ? '◷' : '✧'}</span> ${h(title)}</strong><p>${h(notes.join(' · '))}</p>${pending.length ? `<p class="learning-pending">${h(pending.join(' · '))}，尚未完成学习。</p>` : ''}${s.embedding_error ? `<p class="learning-pending">语义索引暂不可用：${h(s.embedding_error)}</p>` : ''}</div>${s.needs_attention ? '<button class="button" data-action="attention">查看待处理 →</button>' : !state.browser.paired ? '<a class="button" href="/">连接插件 →</a>' : !s.llm_enabled ? '<button class="button" data-action="settings">查看设置 →</button>' : '<span class="learning-hint">摘要与分类自动生成</span>'}`;
 }
 
 async function refreshPrefs() {
@@ -94,13 +103,15 @@ async function renderLibrary(append=false) {
   $('#sort-filter').disabled = false;
   document.querySelectorAll('[data-category]').forEach((el) => el.classList.toggle('active',el.dataset.category === state.category));
   const params = new URLSearchParams({limit:50, offset:append ? state.offset : 0, sort:$('#sort-filter').value, unread:$('#unread-filter').checked});
+  const attention = $('#attention-filter').checked;
+  params.set('attention', attention);
   if (state.category) params.set('category',state.category);
   const result = await api('/articles?' + params);
-  $('#library-title').textContent = state.category || '全部收藏';
+  $('#library-title').textContent = state.category || (attention ? '待处理收藏' : '全部收藏');
   if (!append) { state.articles = []; state.offset = 0; }
   state.articles.push(...result.articles); state.offset = state.articles.length;
-  $('#library-results').innerHTML = result.total ? `<div class="article-list">${state.articles.map(articleRow).join('')}</div>` : empty('还没有这一类收藏', '可以先添加内容，也可以换一个主题看看。');
-  $('#search-meta').textContent = `${result.total} 篇收藏${state.category ? ' · ' + state.category : ''}`;
+  $('#library-results').innerHTML = result.total ? `<div class="article-list">${state.articles.map(articleRow).join('')}</div>` : attention ? empty('没有待处理收藏', '当前筛选中没有缺全文、分析失败或仅保存原文的内容。', '') : empty('还没有这一类收藏', '可以先添加内容，也可以换一个主题看看。');
+  $('#search-meta').textContent = `${result.total} 篇收藏${state.category ? ' · ' + state.category : ''}${attention ? ' · 待补全文 / 分析失败 / 仅存原文' : ''}`;
   $('#load-more').hidden = state.offset >= result.total;
   state.search = false;
 }
@@ -113,6 +124,9 @@ function sourceResult(hit) {
 async function runSearch() {
   const query = $('#search-query').value.trim();
   if (query.length < 2) return renderLibrary();
+  // Semantic search uses indexed source content, so leave the pending-only view.
+  $('#attention-filter').checked = false;
+  $('#library-title').textContent = state.category || '全部收藏';
   const result = await api('/search?' + new URLSearchParams({q:query, category:state.category, unread:$('#unread-filter').checked, limit:15}));
   state.search = true;
   $('#sort-filter').disabled = true;
@@ -148,13 +162,13 @@ function setImportMode(mode) {
   $('#import-result').textContent = ''; $('#import-result').className = 'inline-result';
   if (mode === 'link') {
     $('#import-fields').innerHTML = '<label class="field">文章链接<input id="import-url" type="url" placeholder="https://x.com/作者/status/…" maxlength="2048" required></label><label class="field">标题（可选）<input id="import-name" maxlength="300" placeholder="留空时尝试自动获取"></label>';
-    $('#import-note').textContent = 'X 链接需要服务端配置官方 API 令牌和可用额度。未取得全文时会保存链接并提示补充；普通公开网页可直接提取。';
+    $('#import-note').textContent = '此处直接导入 X 链接仍需官方 API；免费自动补全文用于浏览器插件捕获的书签。也可切换“粘贴全文”，普通公开网页可直接提取。';
   } else if (mode === 'text') {
     $('#import-fields').innerHTML = '<label class="field">文章标题<input id="import-name" placeholder="给这份知识一个名字" maxlength="300" required></label><div class="field-row"><label class="field">作者<input id="import-author" placeholder="未知可留空" maxlength="200"></label><label class="field">内容类型<select id="import-kind"><option value="article">文章 / X 长文</option><option value="thread">完整帖子串 Thread</option><option value="note">个人笔记</option></select></label></div><label class="field">来源链接（可选）<input id="import-url" type="url" placeholder="保留真实原文地址，方便回到来源" maxlength="2048"></label><label class="field">完整正文<textarea id="import-text" rows="9" placeholder="直接粘贴原文。Thread 请按作者发文顺序粘贴，并保留重要上下文。" minlength="20" maxlength="120000" required></textarea></label>';
     $('#import-note').textContent = '正文将原样保存在本地。开启远程模型后，文章会发往你配置的模型服务。未配置模型时仍可保存、编辑、搜索及导出。';
   } else {
     $('#import-fields').innerHTML = '<label class="field">每行一个链接，最多 50 条<textarea id="import-links" rows="9" placeholder="https://x.com/作者/status/…\nhttps://…" required></textarea></label>';
-    $('#import-note').textContent = '自动去除重复链接。每条分别保存，失败的链接可以逐篇补全文；官方 X 请求和模型分析可能计费。';
+    $('#import-note').textContent = '自动去除重复链接，每条分别保存和分析。无法获取的全文会明确标记；使用官方 X API 或模型时消耗对应额度。';
   }
 }
 function openImport() { setImportMode('link'); showDialog('import-dialog'); }
@@ -370,7 +384,7 @@ document.querySelector('[data-open-sync]').addEventListener('click',()=>closeDia
 async function openSettings() {
   $('#settings-categories').value = state.prefs.categories.join('\n'); $('#settings-interests').value = state.prefs.interests || ''; $('#app-token').value = sessionStorage.getItem('xsb-token') || '';
   const s = state.status;
-  $('#settings-status').innerHTML = `<div class="settings-status"><strong>${s.llm_enabled ? '语言模型已配置 · ' + h(s.llm_model) : '语言模型未配置 · 基础收藏模式'}</strong><p>语义模型：${h(s.embedding_model || '尚未连接')} · ${h(s.embedding_provider || '未知')}<br>已建立 ${s.indexed || 0} 篇语义索引 · ${s.queued || 0} 个待处理任务<br>${s.x_configured ? 'X 官方读取令牌已配置，尚未验证账号权限' : 'X 官方读取令牌未配置，可粘贴全文'}${s.embedding_error ? '<br>' + h(s.embedding_error) : ''}</p></div>`;
+  $('#settings-status').innerHTML = `<div class="settings-status"><strong>${s.llm_enabled ? '语言模型已配置 · ' + h(s.llm_model) : '语言模型未配置 · 基础收藏模式'}</strong><p>语义模型：${h(s.embedding_model || '尚未连接')} · ${h(s.embedding_provider || '未知')}<br>已建立 ${s.indexed || 0} 篇语义索引 · ${s.queued || 0} 个待处理任务<br>${state.browser.paired ? '免费浏览器插件已配对' : '免费浏览器插件尚未配对'}${state.browser.public_fulltext_provider === 'fxembed' ? ' · 公开帖自动补全文已启用' : ''}${s.embedding_error ? '<br>' + h(s.embedding_error) : ''}</p></div>`;
   showDialog('settings-dialog');
 }
 $('#preferences-form').addEventListener('submit',(event) => { event.preventDefault(); busy(event.submitter,async () => { const categories = $('#settings-categories').value.split('\n').map((c) => c.trim()).filter(Boolean); await api('/preferences',{method:'PUT',body:{categories,interests:$('#settings-interests').value}}); await refreshPrefs(); toast('偏好已保存。新分析将使用这些分类与关注方向。'); }); });
@@ -408,12 +422,17 @@ document.addEventListener('click',(event) => {
   if (target.dataset.close) closeDialog(target.dataset.close);
   if (target.dataset.action === 'import') openImport();
   if (target.dataset.action === 'settings') openSettings();
+  if (target.dataset.action === 'attention') {
+    state.category = ''; $('#category-filter').value = ''; $('#unread-filter').checked = false;
+    $('#attention-filter').checked = true; $('#search-query').value = '';
+    if (location.hash === '#library') renderLibrary().catch((e) => toast(e.message)); else location.hash = 'library';
+  }
   if (target.dataset.importMode) setImportMode(target.dataset.importMode);
   if (target.dataset.readerMode) { state.readerMode = target.dataset.readerMode; if (state.readerMode !== 'original') state.evidence = null; renderReader(); $('#reader-dialog').scrollTop = 0; }
   if (target.dataset.article) { event.preventDefault(); openArticle(target.dataset.article); }
   if (target.dataset.citation) { const evidence = state.citations.get(target.dataset.citation); if (evidence) openArticle(evidence.article_id,evidence); }
   if (target.dataset.category) { event.preventDefault(); state.category = target.dataset.category; $('#category-filter').value = state.category; if (location.hash === '#library') renderLibrary().catch((e) => toast(e.message)); else location.hash = 'library'; }
-  if (target.dataset.route === 'library' && !target.dataset.category) { state.category = ''; $('#category-filter').value = ''; if (state.route === 'library') renderLibrary().catch((e) => toast(e.message)); }
+  if (target.dataset.route === 'library' && !target.dataset.category) { state.category = ''; $('#category-filter').value = ''; $('#attention-filter').checked = false; if (state.route === 'library') renderLibrary().catch((e) => toast(e.message)); }
   if (target.dataset.prompt) sendQuestion(target.dataset.prompt);
   if (target.dataset.session) loadSession(target.dataset.session).catch((e) => toast(e.message));
 });
@@ -421,18 +440,37 @@ document.addEventListener('keydown',(event) => { if (event.key.toLowerCase() ===
 $('#search-form').addEventListener('submit',(event) => { event.preventDefault(); busy(event.submitter,runSearch,'检索中…'); });
 $('#category-filter').addEventListener('change',(event) => { state.category = event.target.value; (state.search ? runSearch() : renderLibrary()).catch((e) => toast(e.message)); });
 $('#unread-filter').addEventListener('change',() => (state.search ? runSearch() : renderLibrary()).catch((e) => toast(e.message)));
+$('#attention-filter').addEventListener('change',() => { $('#search-query').value = ''; renderLibrary().catch((e) => toast(e.message)); });
 $('#sort-filter').addEventListener('change',() => renderLibrary().catch((e) => toast(e.message)));
 $('#load-more').addEventListener('click',(event) => busy(event.currentTarget,() => renderLibrary(true)));
 window.addEventListener('hashchange',route);
 
 let pollRunning = false;
-setInterval(async () => {
-  if (document.hidden || pollRunning || (!state.status.queued && !state.status.automatic_sync && state.route !== 'sync')) return;
+let lastPoll = 0;
+async function pollKnowledge(force=false) {
+  if (document.hidden || pollRunning) return;
+  const interval = state.status.queued || state.status.automatic_sync || state.route === 'sync' ? 4000 : 12000;
+  if (!force && Date.now() - lastPoll < interval) return;
   pollRunning = true;
-  try { await refreshStatus(); if (state.route === 'sync') await renderSync(); if (state.route === 'home') await renderHome(); if (state.route === 'library' && !state.search && state.offset <= 50) await renderLibrary(); if (state.current && $('#reader-dialog').open && ['queued','processing'].includes(state.current.status)) await openArticle(state.current.id); }
-  catch { /* Startup and explicit actions show connectivity errors; polling does not spam. */ }
+  lastPoll = Date.now();
+  const before = JSON.stringify([state.status, state.browser]);
+  const recovering = !$('#connection-error').hidden;
+  try {
+    await refreshStatus();
+    if (recovering) await refreshPrefs();
+    const changed = recovering || before !== JSON.stringify([state.status, state.browser]);
+    if (state.route === 'sync') await renderSync();
+    if (changed && state.route === 'home') await renderHome();
+    if (changed && state.route === 'library' && !state.search && state.offset <= 50) await renderLibrary();
+    if (state.current && $('#reader-dialog').open && ['queued','processing'].includes(state.current.status)) await openArticle(state.current.id);
+  } catch (error) {
+    $('#connection-error').textContent = error.message + ' 页面会自动重试连接。';
+    $('#connection-error').hidden = false;
+  }
   finally { pollRunning = false; }
-},4000);
+}
+setInterval(() => pollKnowledge(),4000);
+document.addEventListener('visibilitychange',() => { if (!document.hidden) pollKnowledge(true); });
 async function init() {
   try { await Promise.all([refreshStatus(),refreshPrefs()]); await route(); }
   catch (error) { $('#connection-error').textContent = error.message; $('#connection-error').hidden = false; $('#model-status').textContent = '连接设置'; $('#home-priority').innerHTML = empty('连接你的知识空间','确认服务已启动。如果设置了 APP_TOKEN，请打开设置连接。','settings'); }
