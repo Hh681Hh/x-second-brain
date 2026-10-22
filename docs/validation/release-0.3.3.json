@@ -1,0 +1,33 @@
+{
+  "version": "0.3.3",
+  "date": "2026-10-22",
+  "local_python": {"passed": 82, "integration_deselected": 4, "warnings": 1},
+  "local_node": {"passed": 9},
+  "windows_installer": {
+    "clean_basic_install": "passed",
+    "explicit_python_path": "passed",
+    "fresh_virtual_environment": true,
+    "web_pages": "passed",
+    "manual_import_and_database_reopen": "passed",
+    "semantic_install": "not separately repeated in clean environment",
+    "browser_installation": "manual developer-mode loading and pairing required"
+  },
+  "windows_watchdog": {
+    "supervisor_restart_by_scheduler": "passed",
+    "service_restart_by_supervisor": "passed",
+    "real_codex_read_after_scheduled_start": "passed",
+    "system_reboot": "not performed"
+  },
+  "native_unexpanded_bookmark": {
+    "verified": true,
+    "public_fulltext_provider": "fxembed (opt-in)",
+    "content_characters": 31021,
+    "source_paragraphs_matched": 218,
+    "analysis_quotes_verified": 24,
+    "real_codex_analysis": true,
+    "installed_skill_search_and_answer": "passed",
+    "answer_quotes_verified": 6
+  },
+  "privacy": "Source and package exclude personal bookmarks, databases, credentials and logs.",
+  "github_ci": "Workflow template provided; cloud CI is not enabled."
+}

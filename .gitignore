@@ -29,3 +29,4 @@ docs/AUTOSTART-*.md
 docs/DEPLOYMENT-*.md
 docs/validation/*
 !docs/validation/release-0.3.2.json
+!docs/validation/release-0.3.3.json

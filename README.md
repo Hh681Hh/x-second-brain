@@ -6,7 +6,7 @@
 
 原创 MIT 项目，由 **Manifest V3 插件 + Python 后台 + SQLite 知识库 + Codex Skill** 组成。插件与本地存储免费；Codex、其他模型及可选 X 官方 API 的额度或费用由对应服务决定。
 
-> **当前版本：0.3.2。** 默认只保存页面已经加载的文字。可选 FxEmbed 免费公开接口可以在后台补取未展开的公开长文，默认关闭。2026-10-21 已实际验证“未展开卡片原生书签点击 → 31,021 字符全文 → 真实 Codex 分析分类 → Skill 检索及带引用问答”。测试范围与限制见 [验证记录](docs/FREE_FULLTEXT.md)。
+> **当前版本：0.3.3。** 默认只保存页面已经加载的文字。可选 FxEmbed 免费公开接口可以在后台补取未展开的公开长文，默认关闭。2026-10-21 已实际验证“未展开卡片原生书签点击 → 31,021 字符全文 → 真实 Codex 分析分类 → Skill 检索及带引用问答”。测试范围与限制见 [验证记录](docs/FREE_FULLTEXT.md)。
 
 ## 能做什么
 
@@ -27,6 +27,27 @@
 ## 快速开始
 
 需要 **Python 3.11+、Chrome / Edge**。自动阅读默认使用已经安装并登录、有可用额度的 Codex CLI。Node.js 仅运行插件开发测试时需要。
+
+### Windows 下载后安装（推荐）
+
+1. 从 [最新发布](https://github.com/Hh681Hh/x-second-brain/releases/latest) 下载 `x-second-brain-0.3.3-source.zip`，解压到一个固定目录。
+2. 安装 Python 3.11+；需要 AI 阅读时准备已安装并登录的 Codex CLI（`codex login`）。未准备好时仍可手动收藏及全文搜索。
+3. 双击根目录的 `install-windows.cmd`。安装器创建虚拟环境、安装依赖、生成本地配置、安装 Codex Skill、注册当前用户自启并打开连接页；不会覆盖已有 `.env`、数据库或 Skill。
+4. 按下方步骤在 Chrome / Edge 加载 `xsecondbrain/browser_extension`，配对一次，刷新 X 页面。
+
+此项目尚未上架浏览器扩展商店，不是免步骤的商店安装包。Python、浏览器加载及配对仍需用户完成；第一次语义检索会下载本地模型。
+
+如需**不展开长文也尝试自动补全文**，阅读下方 FxEmbed 隐私说明后，在 PowerShell 运行：
+
+```powershell
+& ./scripts/install-windows.ps1 -EnablePublicFulltext
+```
+
+该参数表示同意向 FxEmbed 发送待补全帖子 ID，默认安装不会开启。修改已有后台配置后须按“Windows 登录自启”的步骤重启后台。
+
+安装器可选参数：`-Basic`（新安装关闭语义模型，保留全文搜索）、`-SkipSkill`、`-NoAutostart`、`-NoStart`、`-PythonExe C:\path\python.exe`（指定已安装的解释器）。只安装依赖、不启动任何进程或注册自启可同时使用 `-NoStart -NoAutostart`。安装器会跳过可能打开微软商店的 Python 别名；找不到解释器时请安装 Python 并启用 PATH，或显式指定路径。失败时保留文件，可解决错误后重新运行。安装依赖需要网络，模型调用使用对应账号额度。
+
+### 从源码安装
 
 ```sh
 git clone https://github.com/Hh681Hh/x-second-brain.git
@@ -175,7 +196,7 @@ X 原生书签点击 → MV3 插件 → 本地接收 / 去重 / 队列
 node --test tests/browser_extension.test.cjs
 ```
 
-2026-10-21 已通过 80 项 Python 测试、9 项插件 Node 测试。真实模型/外网测试需显式启用，默认 CI 不使用个人账号或付费额度。公开 Article 隔离测试取得 16,484 字符正文，22 处引文通过原文偏移验证。随后真实 Chrome 未展开卡片书签测试取得 31,021 字符，218 段均与可见 X 正文匹配，24 处分析引用及 6 处问答引用通过原文核对；实际分类为“其他知识”，标签包括个人成长、目标管理。详见 [全文验证](docs/FREE_FULLTEXT.md)。
+2026-10-22 已通过 82 项 Python 测试、9 项插件 Node 测试。真实模型/外网测试需显式启用，默认 CI 不使用个人账号或付费额度。公开 Article 隔离测试取得 16,484 字符正文，22 处引文通过原文偏移验证。随后真实 Chrome 未展开卡片书签测试取得 31,021 字符，218 段均与可见 X 正文匹配，24 处分析引用及 6 处问答引用通过原文核对；实际分类为“其他知识”，标签包括个人成长、目标管理。详见 [全文验证](docs/FREE_FULLTEXT.md)。
 
 [测试范围与复现方法](docs/TESTING.md) · [贡献指南](CONTRIBUTING.md) · [安全说明](SECURITY.md) · [更新记录](CHANGELOG.md)
 
